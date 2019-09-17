@@ -32,7 +32,7 @@ public class GrenadeProperty : MonoBehaviour
 
     private void Start()
     {
-        if (lifeTime == 0) lifeTime = 5f;
+        if (lifeTime == 0) lifeTime = 10f;
 
         Destroy(gameObject, lifeTime);
 

@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Spring : MonoBehaviour
 {
     [SerializeField] LayerMask surface;
     [SerializeField] float trueLength;
+    [Range(0f, 4500f)]
     [SerializeField] float springConstant;
-    [Range(0.1f, 50f)]
+    [Range(1f, 50f)]
     [SerializeField] float dampingModifier;
+    [SerializeField] bool restrained;
     float displacement;
     float beginOfFrameDisplacement = 0;
     public float deltaDisplacement { get { return displacement - beginOfFrameDisplacement; } }
@@ -34,6 +33,17 @@ public class Spring : MonoBehaviour
 
     private void CalculateForces()
     {
+        // Activate if not restrained
+        if (restrained)
+        {
+            rb.isKinematic = true;
+            return;
+        }
+        else if (rb.isKinematic && !restrained)
+        {
+            rb.isKinematic = false;
+        }
+
         // Setup variable to calculate deltaX
         beginOfFrameDisplacement = displacement;
         currentLength = GetDistanceToSurface();

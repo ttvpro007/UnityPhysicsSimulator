@@ -8,10 +8,9 @@ public class Throwing : MonoBehaviour
     [SerializeField] Transform target;
     [SerializeField] Transform spawnPoint;
     [SerializeField] GameObject grenade;
-    [SerializeField] float timeToTarget;
     [SerializeField] float throwingAngle;
     [SerializeField] float gravity;
-    const float SpeedModifier = 4.5f;
+    const float SpeedModifier = 4.4f;
 
     float initialVelocityY;
     float initialVelocityX;
@@ -53,7 +52,6 @@ public class Throwing : MonoBehaviour
         if (!target) Debug.Log("No reference to target");
         if (!grenade) Debug.Log("No reference to grenade");
         if (initialVelocityX == 0) initialVelocityX = 5f;
-        if (timeToTarget == 0) timeToTarget = 2f;
         if (gravity == 0) gravity = 9.8f;
         if (throwingAngle == 0) throwingAngle = 45f;
 
