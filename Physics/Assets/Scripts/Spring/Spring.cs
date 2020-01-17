@@ -13,6 +13,7 @@ public class Spring : MonoBehaviour
     float beginOfFrameDisplacement = 0;
     public float deltaDisplacement { get { return displacement - beginOfFrameDisplacement; } }
     public float currentLength;
+    public float angle;
     Vector3 gForce;
     Vector3 springForce;
     Vector3 dampingForce;
@@ -29,6 +30,7 @@ public class Spring : MonoBehaviour
     private void FixedUpdate()
     {
         CalculateForces();
+        angle = GetAngle(GetRaycast());
     }
 
     private void CalculateForces()
@@ -46,7 +48,7 @@ public class Spring : MonoBehaviour
 
         // Setup variable to calculate deltaX
         beginOfFrameDisplacement = displacement;
-        currentLength = GetDistanceToSurface();
+        currentLength = GetDistanceToSurface(GetRaycast());
         displacement = trueLength - currentLength;
 
         // Forces
@@ -58,16 +60,37 @@ public class Spring : MonoBehaviour
         rb.AddForce(springForce);
     }
 
-    private float GetDistanceToSurface()
+    private Ray GetRaycast()
+    {
+        Ray ray = new Ray(transform.position, transform.TransformVector(Vector3.down));
+        return ray;
+    }
+
+    private float GetDistanceToSurface(Ray ray)
     {
         RaycastHit hit;
+        bool hasHit = Physics.Raycast(ray, out hit, Mathf.Infinity, surface);
 
-        if (Physics.Raycast(transform.position, transform.TransformVector(Vector3.down), out hit, Mathf.Infinity, surface))
+        if (hasHit)
         {
-            Debug.DrawRay(transform.position, transform.TransformVector(Vector3.down) * hit.distance, Color.red);
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red);
             return hit.distance;
         }
 
         return -1;
+    }
+
+    private float GetAngle(Ray ray)
+    {
+        RaycastHit hit;
+        bool hasHit = Physics.Raycast(ray, out hit, Mathf.Infinity, surface);
+
+        if (hasHit)
+        {
+            Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.red);
+            return 90 - Vector3.Angle(-1 * ray.direction, hit.normal);
+        }
+
+        return Mathf.NegativeInfinity;
     }
 }
