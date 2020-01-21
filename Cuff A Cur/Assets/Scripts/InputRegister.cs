@@ -30,11 +30,6 @@ public class InputRegister : MonoBehaviour
         else if (Input.GetKeyDown(RestartButton))
         {
             OnReset.Invoke();
-            //ForceBarUpdator.Instance.Restart();
-            //PunchingObjectManager.Instance.Reset();
-            //ForceApplier.Reset();
-            //ScoreTextUpdator.Reset();
-            //Reset();
         }
     }
 

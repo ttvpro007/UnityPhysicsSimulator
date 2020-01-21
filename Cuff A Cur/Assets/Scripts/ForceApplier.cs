@@ -15,21 +15,21 @@ public class ForceApplier : MonoBehaviour
     public static ForceApplier Instance { get { return instance; } }
 
     // public field
-    public float Velocity { get { return velocity; } }
+    public float Velocity { get { return deltaVelocity; } }
 
     // private variables
     private Rigidbody rb = null;
     private float mass = 0;
-    private static float forceMagnitude = 0;
+    private static float netForceMagnitude = 0;
     private float acceleration = 0;
-    private float velocity = 0;
+    private float deltaVelocity = 0;
     private float deltaTime = 0;
     private float gravityMagnitude = -9.8f;
-    private float friction = 0;
+    private float groundFriction = 0;
     private float bounciness = 0;
-    //private Vector3 normal = new Vector3(0, 0, 0);
-    //private Vector3 gravity = new Vector3(0, -9.8f, 0);
     private static Vector3 moveDirection = Vector3.forward; // set as moving backward when got punched
+
+    private static bool isGrounded = true;
 
     private static bool hasStarted = false;
     private static bool hasStopped = false;
@@ -69,13 +69,13 @@ public class ForceApplier : MonoBehaviour
         }
 
         deltaTime = Time.fixedDeltaTime;
-        friction = GameManager.Instance.Friction;
+        groundFriction = GameManager.Instance.GroundFriction;
         bounciness = GameManager.Instance.Bounciness;
     }
 
     private void FixedUpdate()
     {
-        if (forceMagnitude <= 0)
+        if (netForceMagnitude <= 0)
         {
             OnStopped.Invoke();
             hasStopped = true;
@@ -88,25 +88,25 @@ public class ForceApplier : MonoBehaviour
             hasStarted = true;
         }
 
-        Move();
-        UpdateForce();
+        AddForce(netForceMagnitude, moveDirection);
+        UpdateNetForce();
     }
 
-    private void UpdateForce()
+    private void UpdateNetForce()
     {
         // friction
-        forceMagnitude += gravityMagnitude * mass * friction;
+        netForceMagnitude += gravityMagnitude * mass * groundFriction;
         // clamp to 0
-        forceMagnitude = Mathf.Max(0, forceMagnitude);
+        netForceMagnitude = Mathf.Max(0, netForceMagnitude);
     }
 
-    private void Move()
+    private void AddForce(float forceMagnitude, Vector3 moveDirection)
     {
 
 #if UNITY_EDITOR
         // in case value changed in GameManager
         mass = Mathf.Max(1, GameManager.Instance.Mass);
-        friction = GameManager.Instance.Friction;
+        groundFriction = GameManager.Instance.GroundFriction;
         bounciness = GameManager.Instance.Bounciness;
 #endif
 
@@ -114,16 +114,16 @@ public class ForceApplier : MonoBehaviour
         acceleration = forceMagnitude / mass;
 
         // v = a * t
-        velocity = acceleration * deltaTime;
+        deltaVelocity = acceleration * deltaTime;
 
         // accelTime = 0.5 * a * t^2
-        float accelTime = 0.5f * acceleration * deltaTime * deltaTime;
+        float deltaAccelTime = 0.5f * acceleration * deltaTime * deltaTime;
 
         // veloTime = v * t
-        float veloTime = velocity * deltaTime;
+        float deltaVeloTime = deltaVelocity * deltaTime;
 
         // d = v * t + 0.5 a * t^2 = veloTime + accelTime
-        Vector3 newPos = (veloTime + accelTime) * moveDirection;
+        Vector3 newPos = (deltaVeloTime + deltaAccelTime) * moveDirection;
 
         // move!!!
         rb.MovePosition(transform.position + newPos);
@@ -131,12 +131,12 @@ public class ForceApplier : MonoBehaviour
 
     public static void GetForceFromInputRegister(float value)
     {
-        forceMagnitude = value;
+        netForceMagnitude = value;
     }
 
     public static void Reset()
     {
-        forceMagnitude = 0;
+        netForceMagnitude = 0;
         moveDirection = Vector3.forward;
         hasStarted = false;
         hasStopped = false;
@@ -144,8 +144,10 @@ public class ForceApplier : MonoBehaviour
 
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.tag != "Wall") return;
-        forceMagnitude *= bounciness;
-        moveDirection *= -1;
+        if (collision.gameObject.tag == "Wall")
+        {
+            netForceMagnitude *= bounciness;
+            moveDirection *= -1;
+        }
     }
 }
