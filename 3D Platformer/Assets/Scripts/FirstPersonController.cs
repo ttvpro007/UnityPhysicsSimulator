@@ -5,56 +5,29 @@ using UnityEngine;
 public class FirstPersonController : MonoBehaviour
 {
     [SerializeField] float speed = 0;
-    [SerializeField] float jumpForce = 0;
-    [SerializeField] Transform camRotation = null;
-    private Rigidbody rb = null;
-    private Vector3 gravity = new Vector3(0, -9.8f, 0);
-    private float yaw;
+    [SerializeField] float gravity = -9.8f;
+    [SerializeField] float jumpHeight = 3;
+    [SerializeField] CharacterController controller = null;
+    [SerializeField] Transform groundCheck = null;
+    [SerializeField] float groundDistance = 0;
+    [SerializeField] LayerMask groundLayer = new LayerMask();
 
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
+    private Vector3 velocity = Vector3.zero;
+    private bool isGrounded = false;
 
     private void Update()
     {
-        Turn();
+        float x = Input.GetAxisRaw("Horizontal");
+        float y = Input.GetAxisRaw("Vertical");
+        Vector3 moveDirection = transform.right * x + transform.forward * y;
+        controller.Move(moveDirection * speed * Time.deltaTime);
+
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundLayer);
+        if (isGrounded && velocity.y < 0)
+            velocity.y = -2;
+        if (Input.GetKeyDown(KeyCode.Space))
+            velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
     }
-
-    private void Turn()
-    {
-        Vector3 angles = transform.eulerAngles;
-        angles.y = camRotation.eulerAngles.y;
-        transform.eulerAngles = angles;
-    }
-
-    private void FixedUpdate()
-    {
-        Move();
-
-        if (Input.GetKey(KeyCode.Space))
-        {
-            Jump();
-        }
-    }
-
-    private void Move()
-    {
-        float horizontalf = Input.GetAxisRaw("Horizontal");
-        float verticalf = Input.GetAxisRaw("Vertical");
-
-        if (horizontalf == 0 && verticalf == 0) return;
-
-        Vector3 horizontal = horizontalf * transform.right;
-        Vector3 vertical = verticalf * transform.forward;
-        Vector3 newPosition = (horizontal + vertical) * speed * Time.fixedDeltaTime;
-        rb.MovePosition(transform.position + newPosition);
-    }
-
-    private void Jump()
-    {
-        Vector3 newPosition = transform.up * jumpForce * Time.fixedDeltaTime;
-        rb.AddForce(newPosition, ForceMode.Impulse);
-    }
-
 }
