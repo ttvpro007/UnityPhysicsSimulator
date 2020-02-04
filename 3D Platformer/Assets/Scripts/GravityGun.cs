@@ -11,7 +11,7 @@ enum State
 public class GravityGun : MonoBehaviour
 {
     [SerializeField] private float range = 0;
-    [SerializeField] private float distanceToForceMult = 0;
+    [SerializeField] private float distanceToAccelerationMult = 0;
     [SerializeField] private float objectMaxSpeed = 0;
     [SerializeField] private Transform holdPoint = null;
     [SerializeField] private float tolerantRange = 0;
@@ -26,7 +26,7 @@ public class GravityGun : MonoBehaviour
     private float distanceFromHoldPointToObject = Mathf.Infinity;
     private Vector3 lerpPos = Vector3.zero;
     private bool isMouseDown = false; 
-    private bool canShootRay = false; 
+    private bool canShootRay = true; 
 
     private void Start()
     {
@@ -113,9 +113,11 @@ public class GravityGun : MonoBehaviour
 
     private void PullObject(Vector3 direction)
     {
-        float force = distanceFromHoldPointToObject * distanceToForceMult;
         hitObjectRB.useGravity = false; 
-        hitObjectRB.AddForce(force * direction);
+        //float force = distanceFromHoldPointToObject * distanceToForceMult;
+        //hitObjectRB.AddForce(force * direction);
+        float acceleration = distanceFromHoldPointToObject * distanceToAccelerationMult;
+        hitObjectRB.velocity = acceleration * direction;
         hitObjectRB.velocity = Vector3.ClampMagnitude(hitObjectRB.velocity, objectMaxSpeed);
 
         if (IsObjectInRange())
@@ -149,7 +151,7 @@ public class GravityGun : MonoBehaviour
     {
         canShootRay = true;
         hitObjectTransform = null;
-        hitObjectRB.useGravity = true;
+        if(hitObjectRB) hitObjectRB.useGravity = true;
         hitObjectRB = null;
         state = State.Unoccupied;
     }
