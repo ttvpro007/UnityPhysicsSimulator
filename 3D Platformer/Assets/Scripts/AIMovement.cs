@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class AIMovement : MonoBehaviour
 {
     [SerializeField] private float acceleration = 0;
     [SerializeField] private float maxSpeed = 10;
     [SerializeField] private float baseJumpSpeed = 10;
     [SerializeField] private float jumpSpeedBoost = 25;
+    [SerializeField] private float stoppingDistance = 25;
+    [SerializeField] private Transform target = null;
     private PlatformerPhysicSim ps = null;
+    private Vector3 direction = Vector3.zero;
+    private float distanceToTarget = 0;
     private float mass = 0;
     private float keyDownTime = 0;
     private float minKeyDownTime = 0.1f;
@@ -19,6 +23,7 @@ public class Movement : MonoBehaviour
 
     private void Start()
     {
+        if (!target) target = GameObject.FindGameObjectWithTag("Player").transform;
         ps = GetComponent<PlatformerPhysicSim>();
         mass = ps.Mass;
         fixedDeltaTime = Time.fixedDeltaTime;
@@ -26,27 +31,20 @@ public class Movement : MonoBehaviour
     
     private void Update()
     {
-        Vector3 direction = Input.GetAxis("Horizontal") * transform.right
-                            + Input.GetAxis("Vertical") * transform.forward;
+        distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-        ps.AddForce(acceleration * mass * direction);
+        if (distanceToTarget > stoppingDistance && ps.IsGrounded)
+        {
+            MoveTo(target.position);
+        }
+    }
+
+    private void MoveTo(Vector3 targetPosition)
+    {
+        direction = (targetPosition - transform.position).normalized;
+        //ps.AddForce(acceleration * mass * direction);
+        ps.Velocity = acceleration * Time.deltaTime * direction;
         ps.Velocity = ClampVelocityXZ(ps.Velocity, maxSpeed);
-
-        if (ps.IsGrounded)
-        {
-            jumpCount = 0;
-        }
-
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            keyDownTime = 0;
-            jumpCount++;
-        }
-
-        if (Input.GetKey(KeyCode.Space))
-        {
-            Jump();
-        }
     }
 
     private void Jump()

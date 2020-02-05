@@ -4,11 +4,8 @@ public class PlatformerPhysicSim : MonoBehaviour
 {
     [SerializeField] private float mass = 1;
     [SerializeField] private float gravity = -9.8f;
-    [SerializeField] private float maxSpeed = 10;
-    //[Range(0.1f, 5f)]
-    //[SerializeField] private float zeroToHundredTime = 2;
-    [Range(0f, 5f)]
-    [SerializeField] private float friction = 2;
+    [Range(0f, 1f)]
+    [SerializeField] private float friction = 1;
     [SerializeField] private Transform groundCheck = null;
     [SerializeField] private float groundDistance = 0.2f;
     [SerializeField] private LayerMask groundLayer = 8;
@@ -28,7 +25,6 @@ public class PlatformerPhysicSim : MonoBehaviour
     public float Gravity { get { return gravity; } }
     public float Mass { get { return mass; } }
     public bool IsGrounded { get { return isGrounded; } }
-    public float AirTime { get { return airTime; } }
     
     private void Start()
     {
@@ -41,41 +37,24 @@ public class PlatformerPhysicSim : MonoBehaviour
     private void FixedUpdate()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundLayer);
+#if UNITY_EDITOR
+        deceleration = gravity * friction;
+#endif
         netAcceleration = CalculateNetAcceleration();
         velocity += netAcceleration * fixedDeltaTime;
-        velocity = ClampVelocityXZ(velocity, maxSpeed);
 
         if (isGrounded)
         {
             if (velocity.y < 0) velocity.y = 0;
-            airTime = 0;
-        }
-        else
-        {
-            airTime += fixedDeltaTime;
+            if (velocity.magnitude < 1f)
+            {
+                netAcceleration = Vector3.zero;
+                velocity = Vector3.zero;
+            }
         }
 
         Vector3 newPos = velocity * fixedDeltaTime;
         rb.MovePosition(transform.position + newPos);
-    }
-
-    private Vector3 ClampVelocityXZ(Vector3 velocity, float clampMagnitude)
-    {
-        // clamp speed on XZ plane
-        Vector2 xz = new Vector2(velocity.x, velocity.z);
-        xz = Vector2.ClampMagnitude(xz, clampMagnitude);
-        velocity.x = xz.x;
-        velocity.z = xz.y;
-
-        // on ground and velocity is small
-        // round to 0 to reduce jittering
-        if (isGrounded && velocity.magnitude < 1f)
-        {
-            netAcceleration = Vector3.zero;
-            velocity = Vector3.zero;
-        }
-
-        return velocity;
     }
 
     private Vector3 CalculateNetAcceleration()

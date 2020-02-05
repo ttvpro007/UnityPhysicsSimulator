@@ -13,24 +13,28 @@ public class GravityGun : MonoBehaviour
     [SerializeField] private float range = 0;
     [SerializeField] private float distanceToAccelerationMult = 0;
     [SerializeField] private float objectMaxSpeed = 0;
+    [SerializeField] private float holdPointMoveSpeed = 0;
     [SerializeField] private Transform holdPoint = null;
     [SerializeField] private float tolerantRange = 0;
     [SerializeField] private ParticleSystem rayFX = null;
-    private Vector3 shootDirection = Vector3.zero;
     private State state = State.Unoccupied;
     private RaycastHit hit;
+    private RaycastHitInfo hitInfo = null;
+    private Vector3 pullDirection = Vector3.zero;
     private Transform hitObjectTransform = null;
     private Rigidbody hitObjectRB = null;
-    private Vector3 pullDirection = Vector3.zero;
-    private RaycastHitInfo hitInfo = null;
+    private Transform camTransform = null;
+    private float baseDistance = 5;
+    private float newDistance = 0;
     private float distanceFromHoldPointToObject = Mathf.Infinity;
-    private Vector3 lerpPos = Vector3.zero;
     private bool isMouseDown = false; 
     private bool canShootRay = true; 
 
     private void Start()
     {
         if (!hitInfo) hitInfo = GetComponentInParent<RaycastHitInfo>();
+        camTransform = hitInfo.CamTransform;
+        newDistance = baseDistance;
     }
 
     private void Update()
@@ -45,6 +49,25 @@ public class GravityGun : MonoBehaviour
         {
             isMouseDown = false;
             Reset();
+        }
+
+        if (isMouseDown)
+        {
+            if (Input.GetKey(KeyCode.Q))
+            {
+                newDistance -= holdPointMoveSpeed * Time.deltaTime;
+                newDistance = Mathf.Max(newDistance, baseDistance);
+            }
+            else if (Input.GetKey(KeyCode.E))
+            {
+                newDistance += holdPointMoveSpeed * Time.deltaTime;
+            }
+
+            holdPoint.position = camTransform.position + camTransform.forward * newDistance;
+        }
+        else
+        {
+            holdPoint.position = camTransform.position + camTransform.forward * baseDistance;
         }
 
         if (isMouseDown)
@@ -114,16 +137,9 @@ public class GravityGun : MonoBehaviour
     private void PullObject(Vector3 direction)
     {
         hitObjectRB.useGravity = false; 
-        //float force = distanceFromHoldPointToObject * distanceToForceMult;
-        //hitObjectRB.AddForce(force * direction);
         float acceleration = distanceFromHoldPointToObject * distanceToAccelerationMult;
         hitObjectRB.velocity = acceleration * direction;
         hitObjectRB.velocity = Vector3.ClampMagnitude(hitObjectRB.velocity, objectMaxSpeed);
-
-        if (IsObjectInRange())
-        {
-            hitObjectRB.MovePosition(holdPoint.position);
-        }
     }
 
     private bool IsRayHitObject(out RaycastHit hit, float range)
@@ -153,6 +169,7 @@ public class GravityGun : MonoBehaviour
         hitObjectTransform = null;
         if(hitObjectRB) hitObjectRB.useGravity = true;
         hitObjectRB = null;
+        newDistance = baseDistance;
         state = State.Unoccupied;
     }
 }

@@ -5,7 +5,8 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     [SerializeField] private float range = 0;
-    [SerializeField] private float impactForce = 0;
+    [SerializeField] private float distanceToAccelerationMult = 0;
+    [SerializeField] private float objectMaxSpeed = 0;
     [SerializeField] private ParticleSystem muzzleFlashFX = null;
     [SerializeField] private ParticleSystem impactFX = null;
     private RaycastHitInfo hitInfo = null;
@@ -32,7 +33,10 @@ public class Gun : MonoBehaviour
 
         if (hit.rigidbody)
         {
-            hit.rigidbody.AddForce(shootDirection * impactForce);
+            float hitDistance = Vector3.Distance(transform.position, hit.point);
+            float acceleration = hitDistance * distanceToAccelerationMult;
+            hit.rigidbody.velocity += Mathf.Abs(range - hitDistance) * shootDirection;
+            hit.rigidbody.velocity = Vector3.ClampMagnitude(hit.rigidbody.velocity, objectMaxSpeed);
         }
     }
 }
