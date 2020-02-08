@@ -73,6 +73,7 @@ namespace AI
         private void Update()
         {
             DebugState = State;
+            //DistanceToPlayer = GetHorizontalDistanceToTaget(transform, playerTransform);
             DistanceToPlayer = GetHorizontalDistanceToTaget(transform.position, playerTransform.position);
             //DistanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
             TimeSinceLastSawPlayer += Time.deltaTime;
@@ -144,6 +145,12 @@ namespace AI
         {
             float distance = Vector3.ProjectOnPlane(targetPosition - fromPosition, Vector3.up).magnitude;
             return distance;
+        }
+
+        public static float GetHorizontalDistanceToTaget(Transform fromTransform, Transform targetTransform)
+        {
+            float distance = Vector3.Dot(targetTransform.position - fromTransform.position, fromTransform.TransformDirection(Vector3.forward));
+            return Mathf.Abs(distance);
         }
 
         private void OnDrawGizmosSelected()

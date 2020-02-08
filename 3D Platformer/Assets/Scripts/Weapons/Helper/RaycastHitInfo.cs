@@ -25,5 +25,20 @@ namespace Weapons.Helper
 
             return hit;
         }
+
+        public RaycastHit GetHit(float range, LayerMask hitLayer)
+        {
+            RaycastHit hit;
+
+            rand = Random.insideUnitCircle / range;
+            direction = (view.transform.forward + rand).normalized;
+
+            if (Physics.Raycast(view.transform.position, direction, out hit, range, hitLayer))
+            {
+                Debug.DrawLine(view.transform.position, hit.point, Color.red, 2f);
+            }
+
+            return hit;
+        }
     }
 }

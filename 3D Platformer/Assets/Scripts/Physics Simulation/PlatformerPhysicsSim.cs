@@ -28,6 +28,8 @@ namespace PhysicsSimulation
         public float Mass { get { return mass; } }
         public bool IsGrounded { get { return isGrounded; } }
 
+        public bool UseGravity { get; set; } = true;
+
         private void Start()
         {
             rb = GetComponent<Rigidbody>();
@@ -86,7 +88,10 @@ namespace PhysicsSimulation
             }
             else // not on ground
             {
-                netAcceleration = (acceleration - deceleration) * moveDirection + gravity * Vector3.down;
+                if (UseGravity)
+                    netAcceleration = (acceleration - deceleration) * moveDirection + gravity * Vector3.down;
+                else
+                    netAcceleration = (acceleration - deceleration) * moveDirection;
             }
 
             return netAcceleration;

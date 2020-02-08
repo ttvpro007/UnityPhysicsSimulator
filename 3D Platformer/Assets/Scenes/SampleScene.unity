@@ -8747,6 +8747,7 @@ GameObject:
   - component: {fileID: 1572076548}
   - component: {fileID: 1572076549}
   - component: {fileID: 1572076550}
+  - component: {fileID: 1572076551}
   m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
@@ -8794,7 +8795,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1572076547}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d6f7e02b7fcd60640a185eeafd196436, type: 3}
   m_Name: 
@@ -8807,6 +8808,25 @@ MonoBehaviour:
   holdPoint: {fileID: 964112243}
   tolerantRange: 1
   rayFX: {fileID: 0}
+--- !u!114 &1572076551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1572076547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b86f6295e7aa274480cb08e923516f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 100
+  moveSpeed: 500
+  hookToTargetSpeed: 100
+  grappleLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  ps: {fileID: 0}
 --- !u!1 &1575771596
 GameObject:
   m_ObjectHideFlags: 0
