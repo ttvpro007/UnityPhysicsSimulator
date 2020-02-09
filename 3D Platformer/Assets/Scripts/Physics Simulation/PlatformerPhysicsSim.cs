@@ -9,10 +9,14 @@ namespace PhysicsSimulation
         [Range(0f, 1f)]
         [SerializeField] private float friction = 1;
         [SerializeField] private Transform groundCheck = null;
+        [SerializeField] private Transform ceillingCheck = null;
         [SerializeField] private float groundDistance = 0.2f;
+        [SerializeField] private float ceillingDistance = 0.2f;
         [SerializeField] private LayerMask groundLayer = 8;
+        [SerializeField] private LayerMask ceillingLayer = 8;
 
         private bool isGrounded = true;
+        private bool hitCeilling = true;
         private float acceleration = 0;
         private float deceleration = 0;
         private Vector3 netAcceleration = Vector3.zero;
@@ -20,13 +24,14 @@ namespace PhysicsSimulation
         private Vector3 moveDirection = Vector3.zero;
         private Vector3 newPos = Vector3.zero;
         private Rigidbody rb = null;
-        private float airTime = 0;
         private float fixedDeltaTime = 0;
+        private RaycastHit hit;
 
         public Vector3 Velocity { get { return velocity; } set { velocity = value; } }
         public float Gravity { get { return gravity; } }
         public float Mass { get { return mass; } }
         public bool IsGrounded { get { return isGrounded; } }
+        public bool IsHitWall { get { return isGrounded; } }
 
         public bool UseGravity { get; set; } = true;
 
@@ -41,6 +46,7 @@ namespace PhysicsSimulation
         private void FixedUpdate()
         {
             isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundLayer);
+            hitCeilling = Physics.CheckSphere(ceillingCheck.position, ceillingDistance, ceillingLayer);
 #if UNITY_EDITOR
             deceleration = gravity * friction;
 #endif
@@ -91,7 +97,10 @@ namespace PhysicsSimulation
                 if (UseGravity)
                     netAcceleration = (acceleration - deceleration) * moveDirection + gravity * Vector3.down;
                 else
-                    netAcceleration = (acceleration - deceleration) * moveDirection;
+                    netAcceleration = Vector3.zero;
+
+                if (hitCeilling)
+                    velocity.y = 0;
             }
 
             return netAcceleration;

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Weapons.Helper;
+using PhysicsSimulation.Helper;
 
 namespace Weapons
 {

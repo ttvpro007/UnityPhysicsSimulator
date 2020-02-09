@@ -6,14 +6,6 @@ using PhysicsSimulation;
 
 namespace AI
 {
-    public enum AIState
-    {
-        Patrol,
-        Chase,
-        Attack,
-        Investigate
-    }
-
     public class AIController : MonoBehaviour
     {
         // private

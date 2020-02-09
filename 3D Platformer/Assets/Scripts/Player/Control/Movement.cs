@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using PhysicsSimulation;
+using PhysicsSimulation.Helper;
 
 namespace Player.Control
 {
@@ -11,6 +10,8 @@ namespace Player.Control
         [SerializeField] private float maxSpeed = 10;
         [SerializeField] private float baseJumpSpeed = 10;
         [SerializeField] private float jumpSpeedBoost = 25;
+        [SerializeField] private float distanceToWall = 2;
+        [SerializeField] private LayerMask wallLayer = 8;
         private PlatformerPhysicsSim ps = null;
         private float mass = 0;
         private float keyDownTime = 0;
@@ -18,6 +19,10 @@ namespace Player.Control
         private float maxKeyDownTime = 0.3f;
         private int jumpCount = 0;
         private float fixedDeltaTime = 0;
+        private bool isNearWall = true;
+        private bool canCountJump = true;
+        private RaycastHit hit;
+        private Vector3 direction = Vector3.zero;
 
 
         private void Start()
@@ -29,8 +34,13 @@ namespace Player.Control
 
         private void Update()
         {
-            Vector3 direction = Input.GetAxis("Horizontal") * transform.right
-                                + Input.GetAxis("Vertical") * transform.forward;
+            direction = Input.GetAxis("Horizontal") * transform.right
+                               + Input.GetAxis("Vertical") * transform.forward;
+
+            if (RaycastHitInfo.HitWall(transform, out hit, distanceToWall, wallLayer))
+            {
+                direction = WallParallelDirection(transform, hit.normal, direction);
+            }
 
             ps.AddForce(acceleration * mass * direction);
             ps.Velocity = ClampVelocityXZ(ps.Velocity, maxSpeed);
@@ -75,6 +85,33 @@ namespace Player.Control
             }
 
             keyDownTime += fixedDeltaTime;
+        }
+        
+        private Vector3 WallParallelDirection(Transform body, Vector3 wallNormal, Vector3 direction)
+        {
+            Vector3 parallelDirection = Vector3.zero;
+
+            if (direction != Vector3.zero)
+            {
+                parallelDirection = Vector3.Cross(wallNormal, body.up).normalized;
+
+                float parallelDotDirection = Vector3.Dot(parallelDirection, direction);
+                float directionDotWallNormal = Vector3.Dot(direction, hit.normal);
+
+                if (directionDotWallNormal < 0)
+                {
+                    if (parallelDotDirection < 0)
+                    {
+                        parallelDirection *= -1;
+                    }
+                }
+                else
+                {
+                    return direction;
+                }
+            }
+
+            return parallelDirection;
         }
 
         private Vector3 ClampVelocityXZ(Vector3 velocity, float clampMagnitude)
