@@ -5452,7 +5452,7 @@ MonoBehaviour:
   ceillingDistance: 0.2
   groundLayer:
     serializedVersion: 2
-    m_Bits: 1280
+    m_Bits: 3328
   ceillingLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -9176,18 +9176,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 100
-  stoppingDistance: 5
   constantSpeedDistance: 25
   distanceToAccelerationMult: 100
-  bounceAngle: 75
-  bounceSpeed: 20
+  bounceSpeedBoost: 20
   maxMoveSpeed: 100
   hookToTargetSpeed: 100
   wallCheckDistance: 3
   grappleLayer:
     serializedVersion: 2
-    m_Bits: 1280
+    m_Bits: 3328
   ps: {fileID: 0}
+  movement: {fileID: 0}
 --- !u!1 &1575771596
 GameObject:
   m_ObjectHideFlags: 0

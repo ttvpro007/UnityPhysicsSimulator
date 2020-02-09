@@ -19,8 +19,6 @@ namespace Player.Control
         private float maxKeyDownTime = 0.3f;
         private int jumpCount = 0;
         private float fixedDeltaTime = 0;
-        private bool isNearWall = true;
-        private bool canCountJump = true;
         private RaycastHit hit;
         private Vector3 direction = Vector3.zero;
 
@@ -39,7 +37,7 @@ namespace Player.Control
 
             if (RaycastHitInfo.HitWall(transform, out hit, distanceToWall, wallLayer))
             {
-                direction = WallParallelDirection(transform, hit.normal, direction);
+                direction = PlatformerPhysicsSim.WallHorizontalParallelDirection(transform, hit.normal, direction);
             }
 
             ps.AddForce(acceleration * mass * direction);
@@ -85,33 +83,6 @@ namespace Player.Control
             }
 
             keyDownTime += fixedDeltaTime;
-        }
-        
-        private Vector3 WallParallelDirection(Transform body, Vector3 wallNormal, Vector3 direction)
-        {
-            Vector3 parallelDirection = Vector3.zero;
-
-            if (direction != Vector3.zero)
-            {
-                parallelDirection = Vector3.Cross(wallNormal, body.up).normalized;
-
-                float parallelDotDirection = Vector3.Dot(parallelDirection, direction);
-                float directionDotWallNormal = Vector3.Dot(direction, hit.normal);
-
-                if (directionDotWallNormal < 0)
-                {
-                    if (parallelDotDirection < 0)
-                    {
-                        parallelDirection *= -1;
-                    }
-                }
-                else
-                {
-                    return direction;
-                }
-            }
-
-            return parallelDirection;
         }
 
         private Vector3 ClampVelocityXZ(Vector3 velocity, float clampMagnitude)

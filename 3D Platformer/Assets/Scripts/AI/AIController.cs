@@ -28,8 +28,6 @@ namespace AI
         // constant run-time value
         private FSM controller = new FSM();
         private PlatformerPhysicsSim ps = null;
-        private float minProjectionScalarOnXZPlane = 0;
-        private float minProjectionScalarOnYZPlane = 0;
 
         // public
         // readonly

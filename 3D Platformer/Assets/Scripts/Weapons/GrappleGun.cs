@@ -1,6 +1,7 @@
 ﻿using PhysicsSimulation;
 using UnityEngine;
 using PhysicsSimulation.Helper;
+using Player.Control;
 
 namespace Weapons
 {
@@ -13,16 +14,16 @@ namespace Weapons
     public class GrappleGun : MonoBehaviour
     {
         [SerializeField] private float range = 0;
-        [SerializeField] private float stoppingDistance = 0;
         [SerializeField] private float constantSpeedDistance = 0;
         [SerializeField] private float distanceToAccelerationMult = 0;
-        [SerializeField] private float bounceAngle = 0;
-        [SerializeField] private float bounceSpeed = 0;
+        //[SerializeField] private float bounceAngle = 0;
+        [SerializeField] private float bounceSpeedBoost = 0;
         [SerializeField] private float maxMoveSpeed = 0;
         [SerializeField] private float hookToTargetSpeed = 0;
         [SerializeField] private float wallCheckDistance = 2;
         [SerializeField] private LayerMask grappleLayer = 8;
         [SerializeField] private PlatformerPhysicsSim ps = null;
+        [SerializeField] private Movement movement = null;
 
         private GrappleGunState state = GrappleGunState.Released;
         private RaycastHit hit;
@@ -32,7 +33,7 @@ namespace Weapons
         private bool canShootRay = true;
         private bool canMove = true;
 
-        private float angleMultiplier = 0;
+        //private float angleMultiplier = 0;
         private float minHeightForGrapple = 0;
         private float maxHeightForGrapple = 0;
         private Vector3 hookPoint = Vector3.zero;
@@ -47,7 +48,8 @@ namespace Weapons
         {
             if (!hitInfo) hitInfo = GetComponentInParent<RaycastHitInfo>();
             if (!ps) ps = GetComponentInParent<PlatformerPhysicsSim>();
-            angleMultiplier = Mathf.Tan(bounceAngle * Mathf.PI / 180);
+            if (!movement) movement = GetComponentInParent<Movement>();
+            //angleMultiplier = Mathf.Tan(bounceAngle * Mathf.PI / 180);
         }
 
         // Update is called once per frame
@@ -89,7 +91,7 @@ namespace Weapons
 
         private bool HitEdge()
         {
-            return hit.point.y < maxHeightForGrapple && hit.point.y > minHeightForGrapple;
+            return hookPoint.y < maxHeightForGrapple && hookPoint.y > minHeightForGrapple;
         }
 
         private void MoveToward()
@@ -101,8 +103,11 @@ namespace Weapons
 
             if (RaycastHitInfo.HitWall(ps.transform, out wallHit, wallCheckDistance, grappleLayer))
             {
-                moveDirection = (angleMultiplier * Vector3.up - hit.normal).normalized;
-                ps.Velocity = moveDirection * bounceSpeed;
+                //moveDirection = (angleMultiplier * Vector3.up - hit.normal).normalized;
+                //moveDirection = PlatformerPhysicsSim.WallVerticalUpParallelDirection(ps.transform, hit.normal, moveDirection);
+                moveDirection = PlatformerPhysicsSim.WallVerticalUpParallelDirection(ps.transform, hit.normal, directionToHookPoint);
+                float value = maxHeightForGrapple - hookPoint.y;
+                ps.Velocity = moveDirection * (bounceSpeedBoost + value);
                 canMove = false;
                 ps.UseGravity = true;
             }

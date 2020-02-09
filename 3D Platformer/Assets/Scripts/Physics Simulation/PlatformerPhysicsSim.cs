@@ -116,5 +116,74 @@ namespace PhysicsSimulation
             acceleration = force.magnitude / mass;
             moveDirection = force.normalized;
         }
+        
+        public static Vector3 WallHorizontalParallelDirection(Transform body, Vector3 wallNormal, Vector3 direction)
+        {
+            Vector3 horizontalPrallelDirection = Vector3.zero;
+
+            if (direction != Vector3.zero)
+            {
+                horizontalPrallelDirection = Vector3.Cross(wallNormal, body.up).normalized;
+
+                float parallelDotDirection = Vector3.Dot(horizontalPrallelDirection, direction);
+                float directionDotWallNormal = Vector3.Dot(direction, wallNormal);
+
+                if (directionDotWallNormal < 0)
+                {
+                    if (parallelDotDirection < 0)
+                    {
+                        horizontalPrallelDirection *= -1;
+                    }
+                }
+                else
+                {
+                    return direction;
+                }
+            }
+
+            return horizontalPrallelDirection;
+        }
+
+        public static Vector3 WallVerticalUpParallelDirection(Transform body, Vector3 wallNormal, Vector3 direction)
+        {
+            Vector3 verticalUpParallelDirection = Vector3.zero;
+
+            if (direction != Vector3.zero)
+            {
+                verticalUpParallelDirection = Vector3.Cross(body.right, wallNormal).normalized;
+
+                float parallelDotDirection = Vector3.Dot(verticalUpParallelDirection, direction);
+                float directionDotWallNormal = Vector3.Dot(direction, wallNormal);
+            }
+
+            return verticalUpParallelDirection;
+        }
+
+        public static Vector3 WallVerticalParallelDirection(Transform body, Vector3 wallNormal, Vector3 direction)
+        {
+            Vector3 verticalParallelDirection = Vector3.zero;
+
+            if (direction != Vector3.zero)
+            {
+                verticalParallelDirection = Vector3.Cross(body.right, wallNormal).normalized;
+
+                float parallelDotDirection = Vector3.Dot(verticalParallelDirection, direction);
+                float directionDotWallNormal = Vector3.Dot(direction, wallNormal);
+
+                if (directionDotWallNormal < 0)
+                {
+                    if (parallelDotDirection < 0)
+                    {
+                        verticalParallelDirection *= -1;
+                    }
+                }
+                else
+                {
+                    return direction;
+                }
+            }
+
+            return verticalParallelDirection;
+        }
     }
 }
