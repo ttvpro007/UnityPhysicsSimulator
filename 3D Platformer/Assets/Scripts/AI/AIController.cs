@@ -11,6 +11,7 @@ namespace AI
         // private
         // editable in inspector
         // constant run-time value
+        [SerializeField] private float halfFOVAngle = 60;
         [SerializeField] private float waypointDwellTime = 0;
         [SerializeField] private float waypointTolerance = 1;
         [SerializeField] private float verticalDistanceToJump = 5;
@@ -25,14 +26,18 @@ namespace AI
         [SerializeField] private AIMovement movement = null;
 
         // private
+        private bool isPlayerInFOV = false;
+
+        // private
         // constant run-time value
         private FSM controller = new FSM();
         private PlatformerPhysicsSim ps = null;
+        private Rigidbody rb = null;
 
         // public
         // readonly
-        // constant run-time value
         public bool IsGrounded { get { return ps.IsGrounded; } }
+        public bool CanSeePlayer { get { return isPlayerInFOV; } }
         public float WaypointDwellTime { get { return waypointDwellTime; } }
         public float WaypointTolerance { get { return waypointTolerance; } }
         public float VerticalDistanceToJump { get { return verticalDistanceToJump; } }
@@ -48,7 +53,6 @@ namespace AI
 
         // public
         // read-write
-        // changable run-time value
         public AIState State { get; set; } = AIState.Patrol;
         public float DistanceToPlayer { get; set; } = 0;
         public float TimeSinceLastSawPlayer { get; set; } = Mathf.Infinity;
@@ -63,9 +67,9 @@ namespace AI
         private void Update()
         {
             DebugState = State;
-            //DistanceToPlayer = GetHorizontalDistanceToTaget(transform, playerTransform);
-            DistanceToPlayer = GetHorizontalDistanceToTaget(transform.position, playerTransform.position);
-            //DistanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+            //DistanceToPlayer = GetHorizontalDistanceToTaget(transform.position, playerTransform.position);
+            DistanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+            isPlayerInFOV = IsTargetInFOV(transform.forward, (playerTransform.position - transform.position).normalized, halfFOVAngle);
             TimeSinceLastSawPlayer += Time.deltaTime;
 
             controller.Update(Time.deltaTime);
@@ -76,6 +80,7 @@ namespace AI
             if (!playerTransform) playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
             if (!movement) movement = GetComponent<AIMovement>();
             if (!ps) ps = transform.GetComponent<PlatformerPhysicsSim>();
+            if (!rb) rb = transform.GetComponent<Rigidbody>();
 
             // attack range to be <= to chase distance
             attackRange = Mathf.Min(attackRange, chaseDistance);
@@ -100,12 +105,14 @@ namespace AI
         #region TRANSITION CONDITIONS
         private bool PatrolToChaseCondition()
         {
-            return DistanceToPlayer <= chaseDistance
+            return // canSeePlayer &&
+                DistanceToPlayer <= chaseDistance
                 && ps.IsGrounded;
         }
         private bool ChaseToAttackCondition()
         {
-            return DistanceToPlayer <= attackRange
+            return // canSeePlayer &&
+                DistanceToPlayer <= attackRange
                 && DistanceToPlayer <= chaseDistance
                 && ps.IsGrounded;
         }
@@ -116,12 +123,14 @@ namespace AI
         }
         private bool AttackToChaseCondition()
         {
-            return DistanceToPlayer > attackRange
+            return // canSeePlayer &&
+                DistanceToPlayer > attackRange
                 && ps.IsGrounded;
         }
         private bool InvestigateToChaseCondition()
         {
-            return DistanceToPlayer <= chaseDistance
+            return // canSeePlayer &&
+                DistanceToPlayer <= chaseDistance
                 && ps.IsGrounded;
         }
         private bool InvestigateToPatrolCondition()
@@ -131,16 +140,17 @@ namespace AI
         }
         #endregion
 
+        public static bool IsTargetInFOV(Vector3 forwardDirection, Vector3 toTargetDirection, float halfAngle)
+        {
+            float fov = Mathf.Cos(halfAngle * Mathf.PI / 180);
+            float dot = Vector3.Dot(toTargetDirection, forwardDirection);
+            return dot > fov;
+        }
+
         public static float GetHorizontalDistanceToTaget(Vector3 fromPosition, Vector3 targetPosition)
         {
             float distance = Vector3.ProjectOnPlane(targetPosition - fromPosition, Vector3.up).magnitude;
             return distance;
-        }
-
-        public static float GetHorizontalDistanceToTaget(Transform fromTransform, Transform targetTransform)
-        {
-            float distance = Vector3.Dot(targetTransform.position - fromTransform.position, fromTransform.TransformDirection(Vector3.forward));
-            return Mathf.Abs(distance);
         }
 
         private void OnDrawGizmosSelected()

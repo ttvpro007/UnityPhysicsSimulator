@@ -5,12 +5,6 @@ using Player.Control;
 
 namespace Weapons
 {
-    public enum GrappleGunState
-    {
-        Hooked,
-        Released
-    }
-
     public class GrappleGun : MonoBehaviour
     {
         [SerializeField] private float range = 0;
@@ -24,8 +18,7 @@ namespace Weapons
         [SerializeField] private LayerMask grappleLayer = 8;
         [SerializeField] private PlatformerPhysicsSim ps = null;
         [SerializeField] private Movement movement = null;
-
-        private GrappleGunState state = GrappleGunState.Released;
+        
         private RaycastHit hit;
         private RaycastHit wallHit;
         private RaycastHitInfo hitInfo = null;
@@ -72,20 +65,10 @@ namespace Weapons
                 mouseDownTime += Time.deltaTime;
 
                 //if (mouseDownTime >= 0)
-                if (mouseDownTime >= hookToTargetTime && HitEdge())
-                    state = GrappleGunState.Hooked;
-            }
-
-            switch (state)
-            {
-                case GrappleGunState.Hooked:
-                    if (canMove)
-                        MoveToward();
-                    break;
-                case GrappleGunState.Released:
-                    break;
-                default:
-                    break;
+                if (mouseDownTime >= hookToTargetTime && HitEdge() && canMove)
+                {
+                    MoveToward();
+                }
             }
         }
 
@@ -174,7 +157,6 @@ namespace Weapons
             distanceToHookPoint = 0;
             hookToTargetTime = 0;
             mouseDownTime = 0;
-            state = GrappleGunState.Released;
         }
     }
 }

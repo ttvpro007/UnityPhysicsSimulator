@@ -8,12 +8,14 @@ namespace AI
         [SerializeField] private Transform targetTransform = null;
         [SerializeField] private AIController controller = null;
         [SerializeField] private AIMovement movement = null;
+        [SerializeField] private Transform body = null;
 
         private void Start()
         {
             if (!targetTransform) targetTransform = GameObject.FindGameObjectWithTag("Player").transform;
             if (!controller) controller = GetComponentInParent<AIController>();
             if (!movement) movement = controller.GetComponent<AIMovement>();
+            if (!body) body = GetComponentInParent<Transform>();
         }
 
         private void Update()
@@ -23,6 +25,7 @@ namespace AI
                 case AIState.Chase:
                 case AIState.Attack:
                     transform.LookAt(targetTransform);
+                    //transform.LookAt(Vector3.Lerp(transform.position + transform.forward, targetTransform.position, rotationSmoothFactor * Time.deltaTime));
                     break;
                 case AIState.Patrol:
                 case AIState.Investigate:

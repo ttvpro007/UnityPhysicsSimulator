@@ -25,6 +25,7 @@ namespace AI
 
         private void Update()
         {
+            //transform.LookAt(transform.position + direction);
         }
 
         public void MoveTo(Vector3 targetPosition)
