@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 
-public class DamageDealer : MonoBehaviour
+namespace Core
 {
-    public static void DealDamage(Health target, float damage)
+    public class DamageDealer : MonoBehaviour
     {
-        target.TakeDamage(damage);
+        public static void DealDamage(Health target, float damage)
+        {
+            target.TakeDamage(damage);
+        }
     }
 }

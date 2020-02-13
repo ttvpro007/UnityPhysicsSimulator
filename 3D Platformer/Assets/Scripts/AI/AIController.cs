@@ -3,6 +3,8 @@ using FiniteStateMachine;
 using AI.PatrolPath;
 using AI.States;
 using PhysicsSimulation;
+using PhysicsSimulation.Helper;
+using Core;
 
 namespace AI
 {
@@ -33,6 +35,8 @@ namespace AI
         private FSM controller = new FSM();
         private PlatformerPhysicsSim ps = null;
         private Rigidbody rb = null;
+        private RaycastHitInfo hitInfo = null;
+        private DamageDealer damageDealer = null;
 
         // public
         // readonly
@@ -50,6 +54,8 @@ namespace AI
         public Transform PlayerTransform { get { return playerTransform; } }
         public PatrolPathGraph PatrolPath { get { return patrolPath; } }
         public AIMovement Movement { get { return movement; } }
+        public RaycastHitInfo HitInfo { get { return hitInfo; } }
+        public DamageDealer DamageDealer { get { return damageDealer; } }
 
         // public
         // read-write
@@ -79,8 +85,10 @@ namespace AI
         {
             if (!playerTransform) playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
             if (!movement) movement = GetComponent<AIMovement>();
-            if (!ps) ps = transform.GetComponent<PlatformerPhysicsSim>();
-            if (!rb) rb = transform.GetComponent<Rigidbody>();
+            if (!ps) ps = GetComponent<PlatformerPhysicsSim>();
+            if (!rb) rb = GetComponent<Rigidbody>();
+            if (!hitInfo) hitInfo = GetComponentInChildren<RaycastHitInfo>();
+            damageDealer = GetComponent<DamageDealer>();
 
             // attack range to be <= to chase distance
             attackRange = Mathf.Min(attackRange, chaseDistance);

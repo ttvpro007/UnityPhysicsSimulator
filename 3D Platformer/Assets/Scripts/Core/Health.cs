@@ -1,54 +1,45 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using HUD;
 
-public class Health : MonoBehaviour
+namespace Core
 {
-    [SerializeField] private HealthBarUI healthBar = null;
-    [SerializeField] private float maxHealth = 0;
-    [SerializeField] private int totalHPCell = 0;
-    private float currentHealth = 0;
-    private float cellPercentage = 0;
-    private int currentCellNumber = 0;
-    private int previousCellNumber = 0;
-
-    private void Start()
+    public class Health : MonoBehaviour
     {
-        if (totalHPCell == 0) totalHPCell = 1;
-        cellPercentage = maxHealth / totalHPCell;
-        currentHealth = maxHealth;
-        currentCellNumber = totalHPCell;
-        previousCellNumber = currentCellNumber;
-    }
+        [SerializeField] private HealthBarUI healthBar = null;
+        [SerializeField] private float maxHealth = 0;
+        private int totalHPCell = 0;
+        private float currentHealth = 0;
+        private float healthPerCell = 0;
+        private int currentCellNumber = 0;
+        private int previousCellNumber = 0;
 
-    public void TakeDamage(float amount)
-    {
-        currentHealth -= amount;
-        currentHealth = Mathf.Max(0, currentHealth);
-
-        currentCellNumber = Mathf.FloorToInt(currentHealth / cellPercentage);
-
-        if (currentHealth == 0) Destroy();
-
-        if (currentCellNumber != previousCellNumber) ToggleHPCell();
-    }
-
-    private void ToggleHPCell()
-    {
-        for (int i = 1; i <= totalHPCell; i++)
+        private void Start()
         {
-            healthBar.SetCell(i, false);
+            totalHPCell = healthBar.TotalCells;
+            totalHPCell = Mathf.Max(1, totalHPCell);
+
+            healthPerCell = maxHealth / totalHPCell;
+            currentHealth = maxHealth;
+            currentCellNumber = totalHPCell;
+            previousCellNumber = currentCellNumber;
         }
 
-        for (int i = 1; i <= currentCellNumber; i++)
+        public void TakeDamage(float amount)
         {
-            healthBar.SetCell(i, true);
-        }
-    }
+            currentHealth -= amount;
+            currentHealth = Mathf.Max(0, currentHealth);
+            currentCellNumber = Mathf.CeilToInt(currentHealth / healthPerCell);
 
-    private void Destroy()
-    {
-        gameObject.SetActive(false);
-        Destroy(gameObject, 2);
+            if (currentHealth == 0) Destroy();
+
+            if (currentCellNumber != previousCellNumber)
+                healthBar.ToggleOnOff(totalHPCell - currentCellNumber, 0, false);
+        }
+
+        private void Destroy()
+        {
+            gameObject.SetActive(false);
+            Destroy(gameObject, 2);
+        }
     }
 }
