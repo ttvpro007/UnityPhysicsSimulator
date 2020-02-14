@@ -10,6 +10,7 @@ namespace Weapons
         [SerializeField] private float distanceToAccelerationMult = 0;
         [SerializeField] private float objectMaxSpeed = 0;
         [SerializeField] private float damage = 0;
+        [SerializeField] private LayerMask damageLayer = 0;
         [SerializeField] private ParticleSystem muzzleFlashFX = null;
         [SerializeField] private ParticleSystem impactFX = null;
         private RaycastHitInfo hitInfo = null;
@@ -17,7 +18,7 @@ namespace Weapons
 
         private void Start()
         {
-            if (!hitInfo) hitInfo = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<RaycastHitInfo>();
+            if (!hitInfo) hitInfo = GetComponentInParent<RaycastHitInfo>();
             damageDealer = GetComponentInParent<DamageDealer>();
         }
 
@@ -33,7 +34,7 @@ namespace Weapons
         {
             if (muzzleFlashFX) muzzleFlashFX.Play();
 
-            RaycastHit hit = hitInfo.GetHit(range);
+            RaycastHit hit = hitInfo.GetHit(range, damageLayer);
             Vector3 shootDirection = hitInfo.Direction;
 
             if (hit.rigidbody)

@@ -1297,7 +1297,6 @@ GameObject:
   - component: {fileID: 334520587}
   - component: {fileID: 334520586}
   - component: {fileID: 334520585}
-  - component: {fileID: 334520584}
   - component: {fileID: 334520583}
   m_Layer: 0
   m_Name: Main Camera
@@ -1319,22 +1318,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1390183146}
---- !u!114 &334520584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 334520582}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fdcaa60f01fdac40ae1dd9c61fe87e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  view: {fileID: 334520587}
-  hitLayer:
-    serializedVersion: 2
-    m_Bits: 4608
 --- !u!81 &334520585
 AudioListener:
   m_ObjectHideFlags: 0
@@ -11393,7 +11376,7 @@ PrefabInstance:
     - target: {fileID: 1689273278071187286, guid: f8bf023cc05464b40b5efb7f30b65d32,
         type: 3}
       propertyPath: maxHealth
-      value: 50
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1689273278071187286, guid: f8bf023cc05464b40b5efb7f30b65d32,
         type: 3}
@@ -11409,6 +11392,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3104805524994976027, guid: f8bf023cc05464b40b5efb7f30b65d32,
+        type: 3}
+      propertyPath: damage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3104805524994976027, guid: f8bf023cc05464b40b5efb7f30b65d32,
+        type: 3}
+      propertyPath: damageLayer.m_Bits
+      value: 4608
+      objectReference: {fileID: 0}
+    - target: {fileID: 3104805524994976024, guid: f8bf023cc05464b40b5efb7f30b65d32,
+        type: 3}
+      propertyPath: objectLayer.m_Bits
+      value: 4608
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3104805524803262450, guid: f8bf023cc05464b40b5efb7f30b65d32, type: 3}
@@ -11722,7 +11720,7 @@ PrefabInstance:
     - target: {fileID: 8198069820902777340, guid: 43919b76f8d4f9b4cadc2b9dbc94fb88,
         type: 3}
       propertyPath: attackDamage
-      value: 10
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8198069821296290189, guid: 43919b76f8d4f9b4cadc2b9dbc94fb88,
         type: 3}
@@ -11749,6 +11747,11 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 1390183146}
+    - target: {fileID: 8198069820902777283, guid: 43919b76f8d4f9b4cadc2b9dbc94fb88,
+        type: 3}
+      propertyPath: maxHealth
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3860693918867763292, guid: 43919b76f8d4f9b4cadc2b9dbc94fb88, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 43919b76f8d4f9b4cadc2b9dbc94fb88, type: 3}

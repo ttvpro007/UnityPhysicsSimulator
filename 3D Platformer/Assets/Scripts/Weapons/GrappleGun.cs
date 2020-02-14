@@ -39,7 +39,7 @@ namespace Weapons
         // Start is called before the first frame update
         private void Start()
         {
-            if (!hitInfo) hitInfo = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<RaycastHitInfo>();
+            if (!hitInfo) hitInfo = GetComponentInParent<RaycastHitInfo>();
             if (!ps) ps = GetComponentInParent<PlatformerPhysicsSim>();
             if (!movement) movement = GetComponentInParent<Movement>();
             //angleMultiplier = Mathf.Tan(bounceAngle * Mathf.PI / 180);

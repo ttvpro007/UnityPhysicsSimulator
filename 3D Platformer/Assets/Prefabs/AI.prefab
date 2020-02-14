@@ -333,6 +333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBar: {fileID: 7548463520641518285}
   maxHealth: 100
+  damageIndicator: {fileID: 0}
 --- !u!114 &4047701886720190577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,7 +359,7 @@ GameObject:
   - component: {fileID: 8198069821296290189}
   m_Layer: 0
   m_Name: Eye
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -481,8 +482,11 @@ MonoBehaviour:
   objectMaxSpeed: 100
   holdPointMoveSpeed: 100
   holdPointMouseScrollMoveSpeed: 0
-  holdPoint: {fileID: 8198069820882166766}
   tolerantRange: 1
+  objecLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  holdPoint: {fileID: 8198069820882166766}
   rayFX: {fileID: 0}
 --- !u!1 &8198069821831866485
 GameObject:

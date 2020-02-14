@@ -16,8 +16,9 @@ namespace Weapons
         [SerializeField] private float objectMaxSpeed = 0;
         [SerializeField] private float holdPointMoveSpeed = 0;
         [SerializeField] private float holdPointMouseScrollMoveSpeed = 0;
-        [SerializeField] private Transform holdPoint = null;
         [SerializeField] private float tolerantRange = 0;
+        [SerializeField] private LayerMask objectLayer = 0;
+        [SerializeField] private Transform holdPoint = null;
         [SerializeField] private ParticleSystem rayFX = null;
         private GravityGunState state = GravityGunState.Unoccupied;
         private RaycastHit hit;
@@ -34,7 +35,7 @@ namespace Weapons
 
         private void Start()
         {
-            if (!hitInfo) hitInfo = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<RaycastHitInfo>();
+            if (!hitInfo) hitInfo = GetComponentInParent<RaycastHitInfo>();
             camTransform = hitInfo.CamTransform;
             newDistance = baseDistance;
         }
@@ -162,7 +163,7 @@ namespace Weapons
 
         private bool IsRayHitObject(out RaycastHit hit, float range)
         {
-            hit = hitInfo.GetHit(range);
+            hit = hitInfo.GetHit(range, objectLayer);
             return hit.transform != null;
         }
 

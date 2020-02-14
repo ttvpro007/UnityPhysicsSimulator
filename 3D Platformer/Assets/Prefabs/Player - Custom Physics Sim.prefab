@@ -381,9 +381,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3104805524803262452}
   - component: {fileID: 3104805524803262453}
+  - component: {fileID: 8984121212982437181}
   m_Layer: 0
   m_Name: Eye
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -418,6 +419,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivity: 100
   bodyRB: {fileID: 3104805524487661139}
+--- !u!114 &8984121212982437181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3104805524803262455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fdcaa60f01fdac40ae1dd9c61fe87e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  view: {fileID: 3104805524803262452}
+  hitLayer:
+    serializedVersion: 2
+    m_Bits: 6656
 --- !u!1 &3104805524994976029
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,8 +505,11 @@ MonoBehaviour:
   objectMaxSpeed: 100
   holdPointMoveSpeed: 100
   holdPointMouseScrollMoveSpeed: 10
-  holdPoint: {fileID: 3104805524378106477}
   tolerantRange: 1
+  objecLayer:
+    serializedVersion: 2
+    m_Bits: 4608
+  holdPoint: {fileID: 3104805524378106477}
   rayFX: {fileID: 0}
 --- !u!114 &3104805524994976025
 MonoBehaviour:
