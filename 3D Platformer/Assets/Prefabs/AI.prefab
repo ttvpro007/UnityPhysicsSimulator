@@ -133,8 +133,9 @@ GameObject:
   - component: {fileID: 8198069820902777342}
   - component: {fileID: 8198069820902777343}
   - component: {fileID: 8198069820902777336}
-  - component: {fileID: 8198069820902777337}
+  - component: {fileID: 7088404329107443644}
   - component: {fileID: 8198069820902777338}
+  - component: {fileID: 8198069820902777337}
   - component: {fileID: 8198069820902777339}
   - component: {fileID: 8198069820902777332}
   - component: {fileID: 8198069820902777340}
@@ -224,6 +225,32 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &7088404329107443644
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8198069820902777333}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3, y: 1, z: 3}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &8198069820902777338
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8198069820902777333}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.2, z: 1}
+  m_Center: {x: 0, y: -1, z: 0}
 --- !u!54 &8198069820902777337
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -240,19 +267,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 3
---- !u!65 &8198069820902777338
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8198069820902777333}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 0.2, z: 1}
-  m_Center: {x: 0, y: -1, z: 0}
 --- !u!114 &8198069820902777339
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,6 +307,15 @@ MonoBehaviour:
   acceleration: 600
   maxSpeed: 20
   jumpSpeed: 25
+  knockBackSpeed: 15
+  distanceToWall: 2
+  wallVelocityDampener: 0.076
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  objectLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!114 &8198069820902777340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -463,6 +486,9 @@ MonoBehaviour:
   distanceToAccelerationMult: 0.1
   objectMaxSpeed: 50
   damage: 0
+  damageLayer:
+    serializedVersion: 2
+    m_Bits: 0
   muzzleFlashFX: {fileID: 0}
   impactFX: {fileID: 0}
 --- !u!114 &8198069821553168195
@@ -483,7 +509,7 @@ MonoBehaviour:
   holdPointMoveSpeed: 100
   holdPointMouseScrollMoveSpeed: 0
   tolerantRange: 1
-  objecLayer:
+  objectLayer:
     serializedVersion: 2
     m_Bits: 0
   holdPoint: {fileID: 8198069820882166766}

@@ -486,6 +486,9 @@ MonoBehaviour:
   distanceToAccelerationMult: 0.1
   objectMaxSpeed: 50
   damage: 19
+  damageLayer:
+    serializedVersion: 2
+    m_Bits: 4608
   muzzleFlashFX: {fileID: 0}
   impactFX: {fileID: 0}
 --- !u!114 &3104805524994976024
@@ -506,9 +509,9 @@ MonoBehaviour:
   holdPointMoveSpeed: 100
   holdPointMouseScrollMoveSpeed: 10
   tolerantRange: 1
-  objecLayer:
+  objectLayer:
     serializedVersion: 2
-    m_Bits: 4608
+    m_Bits: 512
   holdPoint: {fileID: 3104805524378106477}
   rayFX: {fileID: 0}
 --- !u!114 &3104805524994976025

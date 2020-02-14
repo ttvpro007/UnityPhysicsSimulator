@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using PhysicsSimulation.Helper;
 using Core;
+using AI;
 
 namespace Weapons
 {
@@ -49,6 +50,12 @@ namespace Weapons
                 {
                     DamageDealer.DealDamage(targetHealth, damage);
                 }
+
+                //AIMovement aiMovement = hit.transform.GetComponent<AIMovement>();
+                //if (aiMovement)
+                //{
+                //    aiMovement.KnockBack(shootDirection, true);
+                //}
             }
         }
     }
