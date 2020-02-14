@@ -34,7 +34,7 @@ namespace Weapons
 
         private void Start()
         {
-            if (!hitInfo) hitInfo = GetComponentInParent<RaycastHitInfo>();
+            if (!hitInfo) hitInfo = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<RaycastHitInfo>();
             camTransform = hitInfo.CamTransform;
             newDistance = baseDistance;
         }

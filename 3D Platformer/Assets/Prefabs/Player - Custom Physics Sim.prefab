@@ -262,6 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBar: {fileID: 0}
   maxHealth: 200
+  damageIndicator: {fileID: 0}
 --- !u!114 &-5906723012526253520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,6 +279,7 @@ MonoBehaviour:
   pistol: {fileID: 3104805524994976027}
   gravityGun: {fileID: 3104805524994976024}
   grappleGun: {fileID: 3104805524994976025}
+  weaponText: {fileID: 0}
 --- !u!1 &3104805524554258542
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,12 +380,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3104805524803262452}
-  - component: {fileID: 3104805524803262448}
-  - component: {fileID: 3104805524803262451}
   - component: {fileID: 3104805524803262453}
-  - component: {fileID: 3104805524803262450}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: Eye
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -405,57 +404,6 @@ Transform:
   m_Father: {fileID: 3104805524487661135}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!20 &3104805524803262448
-Camera:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3104805524803262455}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_projectionMatrixMode: 1
-  m_GateFitMode: 2
-  m_FOVAxisMode: 0
-  m_SensorSize: {x: 36, y: 24}
-  m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 0
-  orthographic size: 5
-  m_Depth: -1
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: 0.022
---- !u!81 &3104805524803262451
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3104805524803262455}
-  m_Enabled: 1
 --- !u!114 &3104805524803262453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -470,22 +418,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivity: 100
   bodyRB: {fileID: 3104805524487661139}
---- !u!114 &3104805524803262450
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3104805524803262455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fdcaa60f01fdac40ae1dd9c61fe87e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  view: {fileID: 3104805524803262452}
-  hitLayer:
-    serializedVersion: 2
-    m_Bits: 4608
 --- !u!1 &3104805524994976029
 GameObject:
   m_ObjectHideFlags: 0

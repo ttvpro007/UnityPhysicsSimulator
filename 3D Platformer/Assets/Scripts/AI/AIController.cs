@@ -29,6 +29,7 @@ namespace AI
 
         // private
         private bool isPlayerInFOV = false;
+        private bool isPlayerAvailable = true;
 
         // private
         // constant run-time value
@@ -60,7 +61,7 @@ namespace AI
         // public
         // read-write
         public AIState State { get; set; } = AIState.Patrol;
-        public float DistanceToPlayer { get; set; } = 0;
+        public float DistanceToPlayer { get; set; } = Mathf.Infinity;
         public float TimeSinceLastSawPlayer { get; set; } = Mathf.Infinity;
 
         public AIState DebugState = AIState.Patrol;
@@ -73,12 +74,23 @@ namespace AI
         private void Update()
         {
             DebugState = State;
-            //DistanceToPlayer = GetHorizontalDistanceToTaget(transform.position, playerTransform.position);
-            DistanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-            isPlayerInFOV = IsTargetInFOV(transform.forward, (playerTransform.position - transform.position).normalized, halfFOVAngle);
-            TimeSinceLastSawPlayer += Time.deltaTime;
 
             controller.Update(Time.deltaTime);
+
+            isPlayerAvailable = playerTransform != null;
+
+            if (isPlayerAvailable)
+            {
+                //DistanceToPlayer = GetHorizontalDistanceToTaget(transform.position, playerTransform.position);
+                DistanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
+                isPlayerInFOV = IsTargetInFOV(transform.forward, (playerTransform.position - transform.position).normalized, halfFOVAngle);
+            }
+            else
+            {
+                Reset();
+            }
+
+            TimeSinceLastSawPlayer += Time.deltaTime;
         }
 
         private void Initiate()
@@ -106,6 +118,7 @@ namespace AI
             controller.AddTransition("Chase", "Attack", ChaseToAttackCondition);
             controller.AddTransition("Chase", "Investigate", ChaseToInvestigateCondition);
             controller.AddTransition("Attack", "Chase", AttackToChaseCondition);
+            controller.AddTransition("Attack", "Investigate", AttackToChaseCondition);
             controller.AddTransition("Investigate", "Chase", InvestigateToChaseCondition);
             controller.AddTransition("Investigate", "Patrol", InvestigateToPatrolCondition);
         }
@@ -135,6 +148,11 @@ namespace AI
                 DistanceToPlayer > attackRange
                 && ps.IsGrounded;
         }
+        private bool AttackToChaseInvestigate()
+        {
+            return !isPlayerAvailable
+                && ps.IsGrounded;
+        }
         private bool InvestigateToChaseCondition()
         {
             return // canSeePlayer &&
@@ -159,6 +177,11 @@ namespace AI
         {
             float distance = Vector3.ProjectOnPlane(targetPosition - fromPosition, Vector3.up).magnitude;
             return distance;
+        }
+
+        private void Reset()
+        {
+            DistanceToPlayer = Mathf.Infinity;
         }
 
         private void OnDrawGizmosSelected()

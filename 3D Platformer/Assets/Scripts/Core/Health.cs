@@ -7,6 +7,7 @@ namespace Core
     {
         [SerializeField] private HealthBarUI healthBar = null;
         [SerializeField] private float maxHealth = 0;
+        [SerializeField] private DamageIndicator damageIndicator = null;
         private int totalHPCell = 0;
         private float currentHealth = 0;
         private float healthPerCell = 0;
@@ -29,6 +30,8 @@ namespace Core
             currentHealth -= amount;
             currentHealth = Mathf.Max(0, currentHealth);
             currentCellNumber = Mathf.CeilToInt(currentHealth / healthPerCell);
+
+            if (damageIndicator) damageIndicator.Trigger();
 
             if (currentHealth == 0) Destroy();
 
