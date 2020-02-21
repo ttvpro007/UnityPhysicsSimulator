@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PortalTeleporter : MonoBehaviour
+public class PortalTele : MonoBehaviour
 {
     [SerializeField] private Transform player;
     [SerializeField] private Transform receiver;
