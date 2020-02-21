@@ -81,6 +81,14 @@ namespace Player.Control
                     ps.Velocity = newVelocity;
                 }
             }
+            else if (jumpCount < 2)
+            {
+                if (keyDownTime < minKeyDownTime)
+                {
+                    newVelocity.y = baseJumpSpeed;
+                    ps.Velocity = newVelocity;
+                }
+            }
 
             keyDownTime += fixedDeltaTime;
         }
