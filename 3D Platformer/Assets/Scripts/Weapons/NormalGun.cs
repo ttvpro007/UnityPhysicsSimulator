@@ -40,7 +40,8 @@ namespace Weapons
 
             if (hit.rigidbody)
             {
-                float hitDistance = Vector3.Distance(transform.position, hit.point);
+                float hitDistance = hit.distance;
+                //float hitDistance = Vector3.Distance(transform.position, hit.point);
                 float acceleration = hitDistance * distanceToAccelerationMult;
                 hit.rigidbody.velocity += Mathf.Abs(range - hitDistance) * shootDirection;
                 hit.rigidbody.velocity = Vector3.ClampMagnitude(hit.rigidbody.velocity, objectMaxSpeed);

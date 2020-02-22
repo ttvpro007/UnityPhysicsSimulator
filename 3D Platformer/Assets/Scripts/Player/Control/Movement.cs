@@ -34,7 +34,7 @@ namespace Player.Control
         {
             direction = Input.GetAxis("Horizontal") * transform.right
                                + Input.GetAxis("Vertical") * transform.forward;
-
+            Debug.DrawLine(transform.position, transform.position + direction, Color.red);
             if (RaycastHitInfo.HitWall(transform, out hit, distanceToWall, wallLayer))
             {
                 direction = PlatformerPhysicsSim.WallHorizontalParallelDirection(transform, hit.normal, direction);

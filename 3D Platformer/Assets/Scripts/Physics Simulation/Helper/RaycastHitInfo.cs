@@ -16,11 +16,18 @@ namespace PhysicsSimulation.Helper
             RaycastHit hit;
 
             rand = Random.insideUnitCircle / range;
-            direction = (view.transform.forward + rand).normalized;
+            direction = (view.forward + rand).normalized;
 
-            if (Physics.Raycast(view.transform.position, direction, out hit, range, hitLayer))
+            if (Physics.Raycast(view.position, direction, out hit, range, hitLayer))
             {
-                Debug.DrawLine(view.transform.position, hit.point, Color.red, 2f);
+                Debug.DrawLine(view.position, hit.point, Color.red, 2f);
+
+                LinkedPortalInfo linkedPortalInfo = hit.transform.GetComponent<LinkedPortalInfo>();
+                if (linkedPortalInfo)
+                {
+                    RaycastHitInfo linkedPortalCamRaycastInfo = linkedPortalInfo.hitInfo;
+                    hit = linkedPortalCamRaycastInfo.GetHit(range);
+                }
             }
 
             return hit;
@@ -36,6 +43,14 @@ namespace PhysicsSimulation.Helper
             if (Physics.Raycast(view.transform.position, direction, out hit, range, hitLayer))
             {
                 Debug.DrawLine(view.transform.position, hit.point, Color.red, 2f);
+                Debug.Log(name + " hit " + hit.transform.name);
+
+                LinkedPortalInfo linkedPortalInfo = hit.transform.GetComponent<LinkedPortalInfo>();
+                if (linkedPortalInfo)
+                {
+                    RaycastHitInfo linkedPortalCamRaycastInfo = linkedPortalInfo.hitInfo;
+                    hit = linkedPortalCamRaycastInfo.GetHit(range, hitLayer);
+                }
             }
 
             return hit;

@@ -17,8 +17,8 @@ namespace PhysicsSimulation
         [SerializeField] private LayerMask groundLayer = 8;
         [SerializeField] private LayerMask ceillingLayer = 8;
 
-        private bool isGrounded = true;
-        private bool hitCeilling = true;
+        private bool isGrounded = false;
+        private bool hitCeilling = false;
         private float acceleration = 0;
         private float deceleration = 0;
         private Vector3 netAcceleration = Vector3.zero;
@@ -47,8 +47,8 @@ namespace PhysicsSimulation
 
         private void FixedUpdate()
         {
-            isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundLayer);
-            hitCeilling = Physics.CheckSphere(ceillingCheck.position, ceillingDistance, ceillingLayer);
+            if (groundCheck) isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundLayer);
+            if (ceillingCheck) hitCeilling = Physics.CheckSphere(ceillingCheck.position, ceillingDistance, ceillingLayer);
 #if UNITY_EDITOR
             deceleration = gravity * friction;
 #endif

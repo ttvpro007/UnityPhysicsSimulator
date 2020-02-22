@@ -28,7 +28,9 @@ public class PortalTele : MonoBehaviour
 
             Vector3 positionOffset = Quaternion.Euler(0, rotationDiff, 0) * portalToPlayer;
             player.position = receiver.position + positionOffset;
-
+            
+            gameObject.SetActive(false);
+            receiver.gameObject.SetActive(true);
             playerIsOverlapping = false;
         }
     }
