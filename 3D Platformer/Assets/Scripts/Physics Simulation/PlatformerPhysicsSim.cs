@@ -8,6 +8,8 @@ namespace PhysicsSimulation
         [SerializeField] private float gravity = -9.8f;
         [Range(0f, 1f)]
         [SerializeField] private float friction = 1;
+        [Range(0f, 1f)]
+        [SerializeField] private float bounciness = 1;
         [SerializeField] private Transform groundCheck = null;
         [SerializeField] private Transform ceillingCheck = null;
         [SerializeField] private float groundDistance = 0.2f;
@@ -55,7 +57,7 @@ namespace PhysicsSimulation
 
             if (isGrounded)
             {
-                if (velocity.y < 0) velocity.y = 0;
+                if (velocity.y < 0) velocity.y *= -1 * bounciness;
                 if (velocity.magnitude < 1f)
                 {
                     netAcceleration = Vector3.zero;
@@ -100,7 +102,7 @@ namespace PhysicsSimulation
                     netAcceleration = Vector3.zero;
 
                 if (hitCeilling)
-                    velocity.y = 0;
+                    if (velocity.y > 0) velocity.y *= -1 * bounciness;
             }
 
             return netAcceleration;

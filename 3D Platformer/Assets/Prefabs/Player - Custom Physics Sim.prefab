@@ -206,6 +206,7 @@ MonoBehaviour:
   mass: 1
   gravity: 29.4
   friction: 1
+  bounciness: 0.8
   groundCheck: {fileID: 3104805525043446204}
   ceillingCheck: {fileID: 3104805523946030501}
   groundDistance: 0.2
