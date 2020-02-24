@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class PortalTextureSetup : MonoBehaviour
 {
-    [SerializeField] private Camera camera1 = null;
-    [SerializeField] private Camera camera2 = null;
-    [SerializeField] private Material cameraMat1 = null;
-    [SerializeField] private Material cameraMat2 = null;
+    [SerializeField] private Camera[] portalCam = null;
+    [SerializeField] private Material[] cameraMat = null;
     
     private void Start()
     {
-        SetUpTexture(camera1, cameraMat1);
-        SetUpTexture(camera2, cameraMat2);
+        for (int i = 0; i < portalCam.Length && i < cameraMat.Length; i++)
+        {
+            SetUpTexture(portalCam[i], cameraMat[i]);
+        }
     }
 
     private static void SetUpTexture(Camera camera, Material cameraMaterial)

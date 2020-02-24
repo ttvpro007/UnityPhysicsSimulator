@@ -79,6 +79,7 @@ GameObject:
   - component: {fileID: 3104805524487661132}
   - component: {fileID: 1689273278071187286}
   - component: {fileID: -5906723012526253520}
+  - component: {fileID: 8699407074228924580}
   m_Layer: 13
   m_Name: Player - Custom Physics Sim
   m_TagString: Player
@@ -281,6 +282,18 @@ MonoBehaviour:
   gravityGun: {fileID: 3104805524994976024}
   grappleGun: {fileID: 3104805524994976025}
   weaponText: {fileID: 0}
+--- !u!114 &8699407074228924580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3104805524487661140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0dad694a5aaebbb41aed139d12bcf1dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3104805524554258542
 GameObject:
   m_ObjectHideFlags: 0
