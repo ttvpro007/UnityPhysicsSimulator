@@ -2150,6 +2150,7 @@ MonoBehaviour:
   portal: {fileID: 1239667181}
   otherPortal: {fileID: 994305665}
   renderedWorld: {fileID: 786444661}
+  FOV: 66
   dotDirection: 0
   dotPosition: 0
   cosFOV: 0
@@ -6560,7 +6561,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1239667178}
-  m_LocalRotation: {x: -0, y: 0.96505684, z: -0, w: 0.2620406}
+  m_LocalRotation: {x: 0, y: 0.9659258, z: 0, w: 0.2588191}
   m_LocalPosition: {x: 23.26, y: 2.5, z: 24.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -6569,7 +6570,7 @@ Transform:
   - {fileID: 1558385373}
   m_Father: {fileID: 0}
   m_RootOrder: 19
-  m_LocalEulerAnglesHint: {x: 0, y: 149.61801, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 150, z: 0}
 --- !u!1 &1245489856
 GameObject:
   m_ObjectHideFlags: 0
@@ -13098,6 +13099,7 @@ MonoBehaviour:
   portal: {fileID: 994305665}
   otherPortal: {fileID: 1239667181}
   renderedWorld: {fileID: 1724458644}
+  FOV: 66
   dotDirection: 0
   dotPosition: 0
   cosFOV: 0

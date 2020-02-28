@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using PhysicsSimulation;
+using Player.Control;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,14 +37,24 @@ public class Portal : MonoBehaviour
 
         if (dotProduct > 0)
         {
-            //Matrix4x4 transformationMatrix = toPortal.transform.localToWorldMatrix * fromPortal.transform.worldToLocalMatrix * traveller.transform.localToWorldMatrix;
-            //traveller.transform.SetPositionAndRotation(transformationMatrix.GetColumn(3), transformationMatrix.rotation);
-            float rotationDiff = -Quaternion.Angle(transform.rotation, linkedPortal.transform.rotation);
-            rotationDiff += 180;
-            traveller.transform.Rotate(Vector3.up, rotationDiff);
+            Debug.DrawLine(fromPortal.transform.position, fromPortal.transform.position + portalToPlayer, Color.green, 10);
+            Vector3 reflectionNormal = Vector3.ProjectOnPlane(portalToPlayer, transform.forward).normalized;
+            Debug.DrawLine(fromPortal.transform.position, fromPortal.transform.position + reflectionNormal, Color.red, 10);
+            Vector3 newPositionOffset = Vector3.Reflect(-portalToPlayer, reflectionNormal);
+            Debug.DrawLine(fromPortal.transform.position, fromPortal.transform.position + newPositionOffset, Color.blue, 10);
+            traveller.transform.position = toPortal.transform.position + newPositionOffset;
 
-            Vector3 positionOffset = Quaternion.Euler(0, rotationDiff, 0) * portalToPlayer;
-            traveller.transform.position = linkedPortal.transform.position + positionOffset;
+            PlatformerPhysicsSim ps = traveller.transform.GetComponent<PlatformerPhysicsSim>();
+            if (ps)
+            {
+                ps.Velocity = Quaternion.FromToRotation(ps.Velocity, -toPortal.transform.forward) * ps.Velocity;
+                float rotationOffset = Quaternion.Angle(fromPortal.transform.rotation, toPortal.transform.rotation);
+                traveller.transform.GetComponentInChildren<MouseLook>().Rotate(traveller.transform.up, rotationOffset);
+            }
+            //else
+            //{
+            //    Quaternion rotation = Quaternion.FromToRotation()
+            //}
 
             traveller.Sender = this;
             traveller.IsTravelling = true;

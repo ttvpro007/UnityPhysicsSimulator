@@ -30,6 +30,7 @@ namespace PhysicsSimulation
         private RaycastHit hit;
 
         public Vector3 Velocity { get { return velocity; } set { velocity = value; } }
+        public Vector3 NetAcceleration { get { return netAcceleration; } set { netAcceleration = value; } }
         public float Gravity { get { return gravity; } }
         public float Mass { get { return mass; } }
         public bool IsGrounded { get { return isGrounded; } }

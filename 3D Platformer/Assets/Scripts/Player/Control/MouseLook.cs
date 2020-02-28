@@ -28,5 +28,11 @@ namespace Player.Control
             yRotation += mouseX;
             bodyRB.MoveRotation(Quaternion.Euler(Vector3.up * yRotation));
         }
+
+        public void Rotate(Vector3 axis, float angle)
+        {
+            yRotation += angle;
+            bodyRB.MoveRotation(Quaternion.Euler(axis * angle));
+        }
     }
 }

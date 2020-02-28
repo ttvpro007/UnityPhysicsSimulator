@@ -8,13 +8,14 @@ public class PortalCam : MonoBehaviour
     [SerializeField] private Transform portal = null;
     [SerializeField] private Transform otherPortal = null;
     [SerializeField] private MeshRenderer renderedWorld = null;
+    [SerializeField] private float FOV = 66;
     public float dotDirection = 0;
     public float dotPosition = 0;
     public float cosFOV = 0;
 
     private void Start()
     {
-        cosFOV = Mathf.Cos(66 * Mathf.PI / 180);
+        cosFOV = Mathf.Cos(FOV * Mathf.PI / 180);
     }
 
     private void LateUpdate()

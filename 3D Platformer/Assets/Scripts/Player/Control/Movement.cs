@@ -20,7 +20,7 @@ namespace Player.Control
         private int jumpCount = 0;
         private float fixedDeltaTime = 0;
         private RaycastHit hit;
-        private Vector3 direction = Vector3.zero;
+        private Vector3 moveDirection = Vector3.zero;
 
 
         private void Start()
@@ -32,15 +32,16 @@ namespace Player.Control
 
         private void Update()
         {
-            direction = Input.GetAxis("Horizontal") * transform.right
+            Debug.DrawLine(transform.position, (transform.position + moveDirection) * 5);
+            moveDirection = Input.GetAxis("Horizontal") * transform.right
                                + Input.GetAxis("Vertical") * transform.forward;
-            Debug.DrawLine(transform.position, transform.position + direction, Color.red);
+            Debug.DrawLine(transform.position, transform.position + moveDirection, Color.red);
             if (RaycastHitInfo.HitWall(transform, out hit, distanceToWall, wallLayer))
             {
-                direction = PlatformerPhysicsSim.WallHorizontalParallelDirection(transform, hit.normal, direction);
+                moveDirection = PlatformerPhysicsSim.WallHorizontalParallelDirection(transform, hit.normal, moveDirection);
             }
 
-            ps.AddForce(acceleration * mass * direction);
+            ps.AddForce(acceleration * mass * moveDirection);
             ps.Velocity = ClampVelocityXZ(ps.Velocity, maxSpeed);
 
             if (ps.IsGrounded)
@@ -102,6 +103,12 @@ namespace Player.Control
             velocity.z = xz.y;
 
             return velocity;
+        }
+
+        public void SetMoveDirection(Vector3 moveDirection)
+        {
+            this.moveDirection = moveDirection;
+            ps.AddForce(acceleration * mass * moveDirection);
         }
     }
 }
