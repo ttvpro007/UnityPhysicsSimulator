@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PortalTraveller : MonoBehaviour
+namespace SimplePortal
 {
-    public Portal Sender = null;
-    public bool IsTravelling = false;
+    public class PortalTraveller : MonoBehaviour
+    {
+        public Portal Sender = null;
+        public bool IsTravelling = false;
+    }
 }

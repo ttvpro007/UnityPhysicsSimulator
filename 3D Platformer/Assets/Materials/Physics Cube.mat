@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Green
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_Name: Physics Cube
+  m_Shader: {fileID: 4800000, guid: aaeaf3dc8c9344c5fa572f7789c131cc, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -72,6 +72,9 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
+    - sliceOffsetDst: 0
     m_Colors:
-    - _Color: {r: 0.46415085, g: 0.6320754, b: 0.10435206, a: 1}
+    - _Color: {r: 1, g: 0.16320226, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - sliceCentre: {r: 0, g: 0, b: 0, a: 0}
+    - sliceNormal: {r: 0, g: 0, b: 0, a: 0}
