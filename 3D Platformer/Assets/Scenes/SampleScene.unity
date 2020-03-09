@@ -2109,7 +2109,6 @@ GameObject:
   m_Component:
   - component: {fileID: 449124627}
   - component: {fileID: 449124626}
-  - component: {fileID: 449124625}
   - component: {fileID: 449124624}
   m_Layer: 0
   m_Name: Portal 2 Camera
@@ -2127,33 +2126,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 449124623}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fdcaa60f01fdac40ae1dd9c61fe87e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  view: {fileID: 449124627}
-  hitLayer:
-    serializedVersion: 2
-    m_Bits: 4608
---- !u!114 &449124625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 449124623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b4d76e4fb151ff4f80456707965f703, type: 3}
+  m_Script: {fileID: 11500000, guid: dcbc859a859a59141a71a181d6a9341a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 334520587}
   portal: {fileID: 1239667181}
   otherPortal: {fileID: 994305665}
-  renderedWorld: {fileID: 786444661}
-  FOV: 66
-  dotDirection: 0
-  dotPosition: 0
-  cosFOV: 0
 --- !u!20 &449124626
 Camera:
   m_ObjectHideFlags: 0
@@ -4200,7 +4178,7 @@ GameObject:
   - component: {fileID: 786444662}
   - component: {fileID: 786444661}
   m_Layer: 0
-  m_Name: Portal 1 World
+  m_Name: World 1 Render Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4259,7 +4237,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 786444660}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -0.49}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5}
   m_LocalScale: {x: 0.5, y: 1, z: 0.5}
   m_Children: []
   m_Father: {fileID: 1239667181}
@@ -5103,11 +5081,11 @@ GameObject:
   - component: {fileID: 994305666}
   m_Layer: 0
   m_Name: Portal 1
-  m_TagString: Untagged
+  m_TagString: Portal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &994305664
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5119,7 +5097,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 4, z: 1}
+  m_Size: {x: 3, y: 4, z: 0}
   m_Center: {x: 0, y: -0.5, z: 0}
 --- !u!4 &994305665
 Transform:
@@ -5147,12 +5125,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 994305663}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81eb32af289595649a273a41945d5597, type: 3}
+  m_Script: {fileID: 11500000, guid: ae7f386dcc2918044b88ffe86d0d7407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   linkedPortal: {fileID: 1239667179}
   portalCamera: {fileID: 2125000209}
-  gateCollider: {fileID: 994305664}
 --- !u!1 &997386808
 GameObject:
   m_ObjectHideFlags: 0
@@ -6521,11 +6498,11 @@ GameObject:
   - component: {fileID: 1239667179}
   m_Layer: 0
   m_Name: Portal 2
-  m_TagString: Untagged
+  m_TagString: Portal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1239667179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6535,12 +6512,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1239667178}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81eb32af289595649a273a41945d5597, type: 3}
+  m_Script: {fileID: 11500000, guid: ae7f386dcc2918044b88ffe86d0d7407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   linkedPortal: {fileID: 994305666}
-  portalCamera: {fileID: 2125000209}
-  gateCollider: {fileID: 1239667180}
+  portalCamera: {fileID: 449124626}
 --- !u!65 &1239667180
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6552,7 +6528,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3, y: 4, z: 1}
+  m_Size: {x: 3, y: 4, z: 0}
   m_Center: {x: 0, y: -0.5, z: 0}
 --- !u!4 &1239667181
 Transform:
@@ -6561,7 +6537,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1239667178}
-  m_LocalRotation: {x: 0, y: 0.9659258, z: 0, w: 0.2588191}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 23.26, y: 2.5, z: 24.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -6570,7 +6546,7 @@ Transform:
   - {fileID: 1558385373}
   m_Father: {fileID: 0}
   m_RootOrder: 19
-  m_LocalEulerAnglesHint: {x: 0, y: 150, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1245489856
 GameObject:
   m_ObjectHideFlags: 0
@@ -10577,7 +10553,7 @@ GameObject:
   - component: {fileID: 1724458645}
   - component: {fileID: 1724458644}
   m_Layer: 0
-  m_Name: Portal 2 World
+  m_Name: World 2 Render Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10590,13 +10566,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1724458641}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -0.49}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0.5}
   m_LocalScale: {x: 0.5, y: 1, z: 0.5}
   m_Children: []
   m_Father: {fileID: 994305665}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -90, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!23 &1724458644
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -13061,7 +13037,6 @@ GameObject:
   - component: {fileID: 2125000207}
   - component: {fileID: 2125000209}
   - component: {fileID: 2125000208}
-  - component: {fileID: 2125000210}
   m_Layer: 0
   m_Name: Portal 1 Camera
   m_TagString: Untagged
@@ -13092,17 +13067,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2125000206}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b4d76e4fb151ff4f80456707965f703, type: 3}
+  m_Script: {fileID: 11500000, guid: dcbc859a859a59141a71a181d6a9341a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 334520587}
   portal: {fileID: 994305665}
   otherPortal: {fileID: 1239667181}
-  renderedWorld: {fileID: 1724458644}
-  FOV: 66
-  dotDirection: 0
-  dotPosition: 0
-  cosFOV: 0
 --- !u!20 &2125000209
 Camera:
   m_ObjectHideFlags: 0
@@ -13146,22 +13116,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &2125000210
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2125000206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fdcaa60f01fdac40ae1dd9c61fe87e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  view: {fileID: 2125000207}
-  hitLayer:
-    serializedVersion: 2
-    m_Bits: 4608
 --- !u!1001 &3104805523959911710
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13288,6 +13242,26 @@ PrefabInstance:
         type: 3}
       propertyPath: hitLayer.m_Bits
       value: 23040
+      objectReference: {fileID: 0}
+    - target: {fileID: 3104805524554258540, guid: f8bf023cc05464b40b5efb7f30b65d32,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3104805524554258540, guid: f8bf023cc05464b40b5efb7f30b65d32,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3104805525662351843, guid: f8bf023cc05464b40b5efb7f30b65d32,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3104805525662351843, guid: f8bf023cc05464b40b5efb7f30b65d32,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3104805524803262450, guid: f8bf023cc05464b40b5efb7f30b65d32, type: 3}

@@ -2,27 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PortalTextureSetup : MonoBehaviour
+namespace PairedPortal
 {
-    [SerializeField] private Camera[] portalCam = null;
-    [SerializeField] private Material[] cameraMat = null;
-    
-    private void Start()
+    public class PortalTextureSetup : MonoBehaviour
     {
-        for (int i = 0; i < portalCam.Length && i < cameraMat.Length; i++)
-        {
-            SetUpTexture(portalCam[i], cameraMat[i]);
-        }
-    }
+        [SerializeField] private Camera[] portalCam = null;
+        [SerializeField] private Material[] cameraMat = null;
 
-    private static void SetUpTexture(Camera camera, Material cameraMaterial)
-    {
-        if (camera.targetTexture)
+        private void Start()
         {
-            camera.targetTexture.Release();
+            for (int i = 0; i < portalCam.Length && i < cameraMat.Length; i++)
+            {
+                SetUpTexture(portalCam[i], cameraMat[i]);
+            }
         }
 
-        camera.targetTexture = new RenderTexture(Screen.width, Screen.height, 24);
-        cameraMaterial.mainTexture = camera.targetTexture;
+        private static void SetUpTexture(Camera camera, Material cameraMaterial)
+        {
+            if (camera.targetTexture)
+            {
+                camera.targetTexture.Release();
+            }
+
+            camera.targetTexture = new RenderTexture(Screen.width, Screen.height, 24);
+            cameraMaterial.mainTexture = camera.targetTexture;
+        }
     }
 }

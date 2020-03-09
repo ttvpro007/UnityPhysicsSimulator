@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SimplePortal
+namespace PairedPortal
 {
     public class PortalTraveller : MonoBehaviour
     {
         public Portal Sender = null;
-        public bool IsTravelling = false;
     }
 }
