@@ -41,8 +41,6 @@ namespace Player.Control
 
         private void Update()
         {
-            GetInputMoveDirection();
-
             CalculateMoveDirection();
 
             Move();
@@ -79,6 +77,8 @@ namespace Player.Control
 
         private void CalculateMoveDirection()
         {
+            moveDirection = GetInputMoveDirection();
+
             slopeAngle = CalculateSlopeAngle(out hit);
             if (slopeAngle > maxTraversableSlopeAngle || slopeAngle == 90f) return;
 
@@ -96,10 +96,10 @@ namespace Player.Control
                     }
                 }
             }
-            else
-            {
-                moveDirection = Vector3.Lerp(moveDirection, Vector3.zero, 5f * Time.deltaTime);
-            }
+            //else
+            //{
+            //    moveDirection = Vector3.Lerp(moveDirection, Vector3.zero, 20f * Time.deltaTime);
+            //}
         }
 
         private float CalculateSlopeAngle(out RaycastHit hit)
@@ -112,9 +112,9 @@ namespace Player.Control
             return 0f;
         }
 
-        private void GetInputMoveDirection()
+        private Vector3 GetInputMoveDirection()
         {
-            moveDirection = Input.GetAxis("Horizontal") * transform.right
+            return Input.GetAxis("Horizontal") * transform.right
                                            + Input.GetAxis("Vertical") * transform.forward;
         }
 
