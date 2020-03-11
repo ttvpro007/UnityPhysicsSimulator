@@ -1,26 +1,34 @@
 ﻿using UnityEngine;
 using PhysicsSimulation;
 using PhysicsSimulation.Helper;
+using System;
 
 namespace Player.Control
 {
     public class Movement : MonoBehaviour
     {
-        [SerializeField] private float acceleration = 0;
-        [SerializeField] private float maxSpeed = 10;
-        [SerializeField] private float baseJumpSpeed = 10;
-        [SerializeField] private float jumpSpeedBoost = 25;
-        [SerializeField] private float distanceToWall = 2;
+        [SerializeField] private float modelHeight = 0f;
+        [SerializeField] private float heightPadding = 0f;
+        [SerializeField] private float acceleration = 0f;
+        [SerializeField] private float maxSpeed = 10f;
+        [SerializeField] private float baseJumpSpeed = 10f;
+        [SerializeField] private float jumpSpeedBoost = 25f;
+        [SerializeField] private float distanceToWall = 2f;
+        [SerializeField] private float maxTraversableSlopeAngle = 180f;
+        [SerializeField] private float adjustPositionDistance = 2f;
         [SerializeField] private LayerMask wallLayer = 8;
+        [SerializeField] private LayerMask groundLayer = 8;
+        [SerializeField] private bool debug = false;
         private PlatformerPhysicsSim ps = null;
-        private float mass = 0;
-        private float keyDownTime = 0;
+        private float mass = 0f;
+        private float keyDownTime = 0f;
         private float minKeyDownTime = 0.1f;
         private float maxKeyDownTime = 0.3f;
         private int jumpCount = 0;
-        private float fixedDeltaTime = 0;
+        private float fixedDeltaTime = 0f;
         private RaycastHit hit;
         private Vector3 moveDirection = Vector3.zero;
+        private float slopeAngle = 0;
 
         public Vector3 Velocity { get { return ps.Velocity; } set { ps.Velocity = value; } }
 
@@ -33,16 +41,11 @@ namespace Player.Control
 
         private void Update()
         {
-            moveDirection = Input.GetAxis("Horizontal") * transform.right
-                               + Input.GetAxis("Vertical") * transform.forward;
+            GetInputMoveDirection();
 
-            if (RaycastHitInfo.HitWall(transform, out hit, distanceToWall, wallLayer))
-            {
-                moveDirection = PlatformerPhysicsSim.WallHorizontalParallelDirection(transform, hit.normal, moveDirection);
-            }
+            CalculateMoveDirection();
 
-            ps.AddForce(acceleration * mass * moveDirection);
-            ps.Velocity = ClampVelocityXZ(ps.Velocity, maxSpeed);
+            Move();
 
             if (ps.IsGrounded)
             {
@@ -59,6 +62,66 @@ namespace Player.Control
             {
                 Jump();
             }
+
+            AdjustPosition();
+
+            Debug();
+        }
+
+        private void AdjustPosition()
+        {
+            if (ps.IsGrounded)
+            if (hit.distance < modelHeight)
+            {
+                transform.position = Vector3.Lerp(transform.position, transform.position + Vector3.up * (modelHeight + heightPadding), 5f * Time.deltaTime);
+            }
+        }
+
+        private void CalculateMoveDirection()
+        {
+            slopeAngle = CalculateSlopeAngle(out hit);
+            if (slopeAngle > maxTraversableSlopeAngle || slopeAngle == 90f) return;
+
+            if (moveDirection != Vector3.zero)
+            {
+                if (ps.IsGrounded)
+                {
+                    moveDirection = Vector3.Cross(hit.normal, -transform.right);
+                }
+                else
+                {
+                    if (RaycastHitInfo.HitWall(transform, out hit, distanceToWall, wallLayer))
+                    {
+                        moveDirection = PlatformerPhysicsSim.WallHorizontalParallelDirection(transform, hit.normal, moveDirection);
+                    }
+                }
+            }
+            else
+            {
+                moveDirection = Vector3.Lerp(moveDirection, Vector3.zero, 5f * Time.deltaTime);
+            }
+        }
+
+        private float CalculateSlopeAngle(out RaycastHit hit)
+        {
+            if (Physics.Raycast(transform.position, -Vector3.up, out hit, modelHeight + heightPadding, groundLayer))
+            {
+                return Vector3.Angle(transform.forward, hit.normal);
+            }
+
+            return 0f;
+        }
+
+        private void GetInputMoveDirection()
+        {
+            moveDirection = Input.GetAxis("Horizontal") * transform.right
+                                           + Input.GetAxis("Vertical") * transform.forward;
+        }
+
+        private void Move()
+        {
+            ps.AddForce(acceleration * mass * moveDirection);
+            ps.Velocity = ClampVelocityXZ(ps.Velocity, maxSpeed);
         }
 
         private void Jump()
@@ -109,6 +172,14 @@ namespace Player.Control
         {
             this.moveDirection = moveDirection;
             ps.AddForce(acceleration * mass * moveDirection);
+        }
+
+        private void Debug()
+        {
+            if (!debug) return;
+
+            UnityEngine.Debug.DrawLine(transform.position, transform.position + moveDirection * 2, Color.blue);
+            UnityEngine.Debug.DrawLine(transform.position, transform.position - Vector3.up * 2, Color.green);
         }
     }
 }
