@@ -7,20 +7,25 @@ namespace Player.Control
 {
     public class Movement : MonoBehaviour
     {
-        [SerializeField] private float modelHeight = 0f;
-        [SerializeField] private float heightPadding = 0f;
+        [Header("Movement Settings")]
         [SerializeField] private float acceleration = 0f;
         [SerializeField] private float maxSpeed = 10f;
         [SerializeField] private float baseJumpSpeed = 10f;
         [SerializeField] private float jumpSpeedBoost = 25f;
-        [SerializeField] private float distanceToWall = 2f;
+
+        [Header("Slope Handling Settings")]
+        [SerializeField] private float modelHeight = 0f;
         [SerializeField] private float maxTraversableSlopeAngle = 180f;
-        [SerializeField] private float adjustPositionDistance = 2f;
-        [SerializeField] private LayerMask wallLayer = 8;
         [SerializeField] private LayerMask groundLayer = 8;
+
+        [Header("Wall Handling Settings")]
+        [SerializeField] private float distanceToWall = 2f;
+        [SerializeField] private LayerMask wallLayer = 8;
         [SerializeField] private bool debug = false;
+
         private PlatformerPhysicsSim ps = null;
         private float mass = 0f;
+        private float heightPadding = 0f;
         private float keyDownTime = 0f;
         private float minKeyDownTime = 0.1f;
         private float maxKeyDownTime = 0.3f;
@@ -36,6 +41,7 @@ namespace Player.Control
         {
             ps = GetComponent<PlatformerPhysicsSim>();
             mass = ps.Mass;
+            heightPadding = ps.GroundDistance;
             fixedDeltaTime = Time.fixedDeltaTime;
         }
 
@@ -80,7 +86,7 @@ namespace Player.Control
             moveDirection = GetInputMoveDirection();
 
             slopeAngle = CalculateSlopeAngle(out hit);
-            if (slopeAngle > maxTraversableSlopeAngle || slopeAngle == 90f) return;
+            if (slopeAngle > maxTraversableSlopeAngle + 90f || slopeAngle == 90f) return;
 
             if (moveDirection != Vector3.zero)
             {
@@ -96,10 +102,6 @@ namespace Player.Control
                     }
                 }
             }
-            //else
-            //{
-            //    moveDirection = Vector3.Lerp(moveDirection, Vector3.zero, 20f * Time.deltaTime);
-            //}
         }
 
         private float CalculateSlopeAngle(out RaycastHit hit)

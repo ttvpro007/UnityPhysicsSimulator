@@ -234,10 +234,16 @@ MonoBehaviour:
   maxSpeed: 10
   baseJumpSpeed: 15
   jumpSpeedBoost: 70
+  modelHeight: 1
+  maxTraversableSlopeAngle: 50
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 3328
   distanceToWall: 3
   wallLayer:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 34816
+  debug: 0
 --- !u!114 &3104805524487661132
 MonoBehaviour:
   m_ObjectHideFlags: 0

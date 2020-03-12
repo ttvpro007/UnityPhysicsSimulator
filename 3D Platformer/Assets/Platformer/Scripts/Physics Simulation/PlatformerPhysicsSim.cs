@@ -33,6 +33,7 @@ namespace PhysicsSimulation
         public Vector3 NetAcceleration { get { return netAcceleration; } set { netAcceleration = value; } }
         public float Gravity { get { return gravity; } }
         public float Mass { get { return mass; } }
+        public float GroundDistance { get { return groundDistance; } }
         public bool IsGrounded { get { return isGrounded; } }
         public bool IsHitWall { get { return isGrounded; } }
 

@@ -14,6 +14,7 @@ public class CustomNavMeshAgent : MonoBehaviour
     [SerializeField] private float stoppingDistance = 2.0f;
     [SerializeField] private float turnSmoothingFactor = 12.5f;
     [SerializeField] private float agentHeight = 0.5f;
+    [SerializeField] private float groundHeight = 0f;
 
     private bool isPathInitialized = false;
     private bool hasReset = false;
@@ -29,25 +30,6 @@ public class CustomNavMeshAgent : MonoBehaviour
         pathArray = new ArrayList();
         //FindPath();
 	}
-	
-	private void Update () 
-    {
-        //elapsedTime += Time.deltaTime;
-
-        //if (elapsedTime >= pathUpdateInterval)
-        //{
-        //    elapsedTime = 0.0f;
-        //    FindPath();
-        //}
-	}
-
-    //private void FindPath()
-    //{
-    //    startNode = new Node(gridManager.GetGridCellCenter(gridManager.GetGridIndex(transform.position)));
-    //    targetNode = new Node(gridManager.GetGridCellCenter(gridManager.GetGridIndex(targetTransform.position)));
-
-    //    pathArray = AStar.FindPath(startNode, targetNode);
-    //}
 
     private ArrayList FindPath(Vector3 destination)
     {
@@ -105,7 +87,7 @@ public class CustomNavMeshAgent : MonoBehaviour
 
     private Vector3 GetMoveDirection(Vector3 targetPosition)
     {
-        targetPosition.y = agentHeight;
+        targetPosition.y = agentHeight + groundHeight;
         Vector3 direction = (targetPosition - transform.position).normalized;
         return direction;
     }

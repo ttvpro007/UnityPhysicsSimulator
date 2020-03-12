@@ -14,52 +14,77 @@ namespace Environment.Platform
 
         [Header("Settings")]
         [SerializeField] private Type type = Type.Linear;
+        [Range(0f, 1f)]
         [SerializeField] private float speed = 0f;
+        [SerializeField] private bool moving = false;
 
         private float step = 0f;
         private bool isGoingToEndPoint = true;
         
         private void Update()
         {
-            step = CalculateStep(step * speed);
+            Move();
+        }
+
+        private void Move()
+        {
+            if (!moving || !start || !end) return;
+
+            step = CalculateStep(step);
 
             if (step == 0 || step == 1)
                 isGoingToEndPoint = !isGoingToEndPoint;
 
-            step = isGoingToEndPoint ? step + Time.deltaTime : step - Time.deltaTime;
-
-            transform.position = Vector3.Lerp(Vector3.Lerp(start.position, bezier.position, step), Vector3.Lerp(bezier.position, end.position, step), step);
+            if (bezier)
+                transform.position = Vector3.Lerp(Vector3.Lerp(start.position, bezier.position, step), Vector3.Lerp(bezier.position, end.position, step), step);
+            else
+                transform.position = Vector3.Lerp(start.position, end.position, step);
         }
 
         private float CalculateStep(float step)
         {
+            step = isGoingToEndPoint ? step + Time.deltaTime * speed : step - Time.deltaTime * speed;
+
             switch (type)
             {
                 case Type.Linear:
-                    return Linear.InOut(step);
+                    step = Linear.InOut(step);
+                    break;
                 case Type.Quadratic:
-                    return Quadratic.InOut(step);
+                    step = Quadratic.InOut(step);
+                    break;
                 case Type.Cubic:
-                    return Cubic.InOut(step);
+                    step = Cubic.InOut(step);
+                    break;
                 case Type.Quartic:
-                    return Quartic.InOut(step);
+                    step = Quartic.InOut(step);
+                    break;
                 case Type.Quintic:
-                    return Quintic.InOut(step);
+                    step = Quintic.InOut(step);
+                    break;
                 case Type.Sinusoidal:
-                    return Sinusoidal.InOut(step);
+                    step = Sinusoidal.InOut(step);
+                    break;
                 case Type.Exponential:
-                    return Exponential.InOut(step);
+                    step = Exponential.InOut(step);
+                    break;
                 case Type.Circular:
-                    return Circular.InOut(step);
+                    step = Circular.InOut(step);
+                    break;
                 case Type.Elastic:
-                    return Elastic.InOut(step);
+                    step = Elastic.InOut(step);
+                    break;
                 case Type.Back:
-                    return Back.InOut(step);
+                    step = Back.InOut(step);
+                    break;
                 case Type.Bounce:
-                    return Bounce.InOut(step);
+                    step = Bounce.InOut(step);
+                    break;
                 default:
                     return -1f;
             }
+            
+            return step = (isGoingToEndPoint ? Mathf.Min(step, 1) : Mathf.Max(step, 0));
         }
     }
 }

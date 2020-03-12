@@ -86,7 +86,7 @@ public class AStar
             openList.Remove(node);
         }
 
-        //We handle the scenario where no goal was found after looping thorugh the open list
+        //We handle the scenario where no goal was found after looping through the open list
         if (node.position != goal.position)
         {
             Debug.LogError("Goal Not Found");
