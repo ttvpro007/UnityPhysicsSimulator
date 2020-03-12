@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Interpolation.Easing
+namespace CustomMathLibrary.Interpolation.Easing
 {
     public enum Type
     {

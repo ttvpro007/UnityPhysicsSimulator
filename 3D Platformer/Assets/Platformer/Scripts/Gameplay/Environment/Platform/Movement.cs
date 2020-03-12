@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Interpolation.Easing;
+using CustomMathLibrary.Interpolation.Easing;
+using CustomMathLibrary;
 
 namespace Environment.Platform
 {
@@ -30,7 +31,8 @@ namespace Environment.Platform
         {
             if (!moving || !start || !end) return;
 
-            step = CalculateStep(step);
+            //step = CalculateStep(step);
+            step = CustomMathf.CalculateStepClamp01(step, type, isGoingToEndPoint);
 
             if (step == 0 || step == 1)
                 isGoingToEndPoint = !isGoingToEndPoint;
