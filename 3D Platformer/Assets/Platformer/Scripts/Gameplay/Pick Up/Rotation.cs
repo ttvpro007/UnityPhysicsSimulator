@@ -18,6 +18,7 @@ namespace Gameplay.PickUp
         [SerializeField] private Vector3 axis = Vector3.up;
 
         private float speed = 0f;
+        private float lerpValue = 0f;
         private float step = 0f;
         private bool isZeroToOne  = true;
 
@@ -38,9 +39,10 @@ namespace Gameplay.PickUp
         {
             if (easing)
             {
-                step = CustomMathf.CalculateStepClamp01(step, type, isZeroToOne);
-                isZeroToOne = (step == 0f || step == 1f) ? !isZeroToOne : isZeroToOne;
-                speed = Mathf.Lerp(minSpeed, maxSpeed, step);
+                UpdateStep();
+                ToggleBoolean(ref isZeroToOne, step == 0 || step == 1);
+                lerpValue = CalculateLerpValue();
+                speed = Mathf.Lerp(minSpeed, maxSpeed, lerpValue);
             }
             else
             {
@@ -48,6 +50,22 @@ namespace Gameplay.PickUp
             }
         }
 
-        
+        private float CalculateLerpValue()
+        {
+            return CustomMathf.CalculateLerpValueClamp01(step, type, isZeroToOne);
+        }
+
+        private void ToggleBoolean(ref bool boolean, bool toggleCondition)
+        {
+            boolean = (toggleCondition) ? !boolean : boolean;
+        }
+
+        private void UpdateStep()
+        {
+            step = isZeroToOne ? step + Time.deltaTime : step - Time.deltaTime;
+            //step = isZeroToOne ? Mathf.Min(step, 1f) : Mathf.Max(step, 0f);
+            step = CustomMathf.ClampMinMax(0f, 1f, step);
+        }
+
     }
 }

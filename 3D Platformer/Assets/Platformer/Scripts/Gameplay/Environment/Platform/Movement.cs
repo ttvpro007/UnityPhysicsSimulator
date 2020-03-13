@@ -32,7 +32,7 @@ namespace Environment.Platform
             if (!moving || !start || !end) return;
 
             //step = CalculateStep(step);
-            step = CustomMathf.CalculateStepClamp01(step, type, isGoingToEndPoint);
+            step = CustomMathf.CalculateLerpValueClamp01(step, type, isGoingToEndPoint);
 
             if (step == 0 || step == 1)
                 isGoingToEndPoint = !isGoingToEndPoint;
