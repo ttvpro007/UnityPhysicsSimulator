@@ -14,7 +14,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform player = null;
     [SerializeField] private Transform goal = null;
     [SerializeField] private Text winText = null;
+    [SerializeField] private ScoreTextUpdator scoreText = null;
     private bool isQuitting = false;
+
+    private float score = 0f;
 
     private void Awake()
     {
@@ -37,6 +40,13 @@ public class GameManager : MonoBehaviour
             Debug.Log(winText.text);
             if (!isQuitting) StartCoroutine(QuitGame(3));
         }
+
+        scoreText.UpdateText("" + score);
+    }
+
+    public void AddToScore(float amount)
+    {
+        score += amount;
     }
 
     private IEnumerator QuitGame(float timer)

@@ -1,21 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using CustomMathLibrary.Interpolation.Easing;
 using CustomMathLibrary;
 
-namespace Gameplay.PickUp
+namespace Environment.Behaviours
 {
     public class Rotation : MonoBehaviour
     {
+        [Header("Properties")]
+        [SerializeField] private Vector3 rotateAxis = Vector3.up;
+
         [Header("Settings")]
-        [SerializeField] private Type type = Type.Linear;
         [SerializeField] private bool rotate = true;
         [SerializeField] private bool easing = true;
+        [SerializeField] private Type type = Type.Linear;
         [SerializeField] private float baseSpeed = 10f;
         [SerializeField] private float minSpeed = 5f;
         [SerializeField] private float maxSpeed = 10f;
-        [SerializeField] private Vector3 axis = Vector3.up;
 
         private float speed = 0f;
         private float lerpValue = 0f;
@@ -32,40 +32,46 @@ namespace Gameplay.PickUp
             if (!rotate) return;
 
             CalculateSpeed();
-            transform.Rotate(axis, speed * Time.deltaTime);
+            UpdateStep();
+            ToggleBoolean(ref isZeroToOne, step == 0 || step == 1);
+            CalculateLerpValue();
+
+            transform.Rotate(rotateAxis, speed);
         }
 
         private void CalculateSpeed()
         {
             if (easing)
             {
-                UpdateStep();
-                ToggleBoolean(ref isZeroToOne, step == 0 || step == 1);
-                lerpValue = CalculateLerpValue();
-                speed = Mathf.Lerp(minSpeed, maxSpeed, lerpValue);
+                speed = Mathf.Lerp(minSpeed, maxSpeed, lerpValue) * Time.deltaTime;
             }
             else
             {
-                speed = baseSpeed;
+                speed = baseSpeed * Time.deltaTime;
             }
         }
 
-        private float CalculateLerpValue()
+        private void CalculateLerpValue()
         {
-            return CustomMathf.CalculateLerpValueClamp01(step, type, isZeroToOne);
-        }
-
-        private void ToggleBoolean(ref bool boolean, bool toggleCondition)
-        {
-            boolean = (toggleCondition) ? !boolean : boolean;
+            if (easing)
+            {
+                lerpValue = CustomMathf.CalculateLerpValueClamp01(step, type, isZeroToOne);
+            }
+            else
+            {
+                lerpValue = step;
+            }
         }
 
         private void UpdateStep()
         {
             step = isZeroToOne ? step + Time.deltaTime : step - Time.deltaTime;
-            //step = isZeroToOne ? Mathf.Min(step, 1f) : Mathf.Max(step, 0f);
             step = CustomMathf.ClampMinMax(0f, 1f, step);
         }
 
+        private static void ToggleBoolean(ref bool boolean, bool toggleCondition)
+        {
+            boolean = (toggleCondition) ? !boolean : boolean;
+        }
     }
 }
