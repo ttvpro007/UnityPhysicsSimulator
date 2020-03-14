@@ -36,6 +36,12 @@ namespace PairedPortal
             else
             {
                 traveller.transform.SetPositionAndRotation(transformationMatrix.GetColumn(3), transformationMatrix.rotation);
+                Rigidbody rb = traveller.transform.GetComponent<Rigidbody>();
+                if (rb)
+                {
+                    rb.velocity = toPortalTransform.TransformVector(fromPortalTransform.InverseTransformVector(rb.velocity));
+                    rb.angularVelocity = toPortalTransform.TransformVector(fromPortalTransform.InverseTransformVector(rb.angularVelocity));
+                }
             }
 
         }
