@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NavMeshAgentController : MonoBehaviour
+namespace AI.PathFinding
 {
-    [SerializeField] private Transform destinationTransform = null;
-
-    private CustomNavMeshAgent agent = null;
-
-    private void Start()
+    public class NavMeshAgentController : MonoBehaviour
     {
-        agent = GetComponent<CustomNavMeshAgent>();
-    }
+        [SerializeField] private Transform destinationTransform = null;
 
-    private void Update()
-    {
-        agent.MoveTo(destinationTransform.position);
+        private CustomNavMeshAgent agent = null;
+
+        private void Start()
+        {
+            agent = GetComponent<CustomNavMeshAgent>();
+        }
+
+        private void Update()
+        {
+            agent.MoveTo(destinationTransform.position);
+        }
     }
 }
