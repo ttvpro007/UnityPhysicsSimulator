@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform goal = null;
     [SerializeField] private Text winText = null;
     [SerializeField] private ScoreTextUpdator scoreText = null;
+    [SerializeField] private Death deathCheck = null;
     private bool isQuitting = false;
 
     private float score = 0f;
@@ -42,6 +44,11 @@ public class GameManager : MonoBehaviour
         }
 
         scoreText.UpdateText("" + score);
+
+        if (deathCheck.PlayerIsDead)
+        {
+            SceneManager.LoadScene(0);
+        }
     }
 
     public void AddToScore(float amount)

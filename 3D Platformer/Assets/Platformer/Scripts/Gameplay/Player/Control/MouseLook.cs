@@ -15,6 +15,7 @@ namespace Player.Control
 
         private void Start()
         {
+            Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
 

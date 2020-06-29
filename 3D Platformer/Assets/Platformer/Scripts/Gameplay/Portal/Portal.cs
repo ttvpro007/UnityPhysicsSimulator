@@ -32,7 +32,7 @@ namespace PairedPortal
 
         private void Start()
         {
-            linkedPortal.transform.rotation = transform.rotation;
+            //linkedPortal.transform.rotation = transform.rotation;
             screenBoxCollider = Screen.GetComponent<BoxCollider>();
         }
     }

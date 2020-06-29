@@ -9,10 +9,10 @@ namespace AI.States
         private AIController controller = null;
         private AIMovement movement = null;
         private PatrolPathGraph patrolPath = null;
-        public Vector3 guardPosition = Vector3.zero;
+        private Vector3 guardPosition = Vector3.zero;
         private float waypointTolerance = 0;
         private float waypointDwellTime = 0;
-        private float chaseDistance = 0;
+        //private float chaseDistance = 0;
         private float timeSinceArrivedAtWaypoint = Mathf.Infinity;
         private int currentWaypointIndex = 0;
 
@@ -29,7 +29,7 @@ namespace AI.States
             guardPosition = controller.transform.position;
             waypointTolerance = controller.WaypointTolerance;
             waypointDwellTime = controller.WaypointDwellTime;
-            chaseDistance = controller.ChaseDistance;
+            //chaseDistance = controller.ChaseDistance;
 
             controller.State = AIState.Patrol;
             Debug.Log("[" + controller.gameObject.name + "] Started Patrolling");

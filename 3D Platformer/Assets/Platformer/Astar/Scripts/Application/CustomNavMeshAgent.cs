@@ -30,7 +30,6 @@ namespace AI.PathFinding
 
             //Calculate the path using our AStart code.
             pathArray = new ArrayList();
-            //FindPath();
         }
 
         private ArrayList FindPath(Vector3 destination)
