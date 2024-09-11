@@ -1,98 +1,44 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GrenadeProperty : MonoBehaviour
 {
-    [SerializeField] float lifeTime;
-
-    float gravity;
-    float initialVelocity;
-    float initialVelocityX;
-    float initialVelocityY;
-    float initialVelocityZ;
-    float displacementX; // z axis on 3D system
-    float displacementY; // y axis on 2D system
-    float displacementZ; // x axis on 2D system
-    float time = 0f;
-    Rigidbody rb;
-    Throwing thrower;
-
-    float alpha;
-    float beta;
-    float theta;
-    float cosAlpha;
-    float cosBeta;
-    float cosTheta;
-    float sinTheta;
-    
-    const float frameTime = 1f / 30f;
-    float timeSinceLastFrame = Mathf.Infinity;
+    [SerializeField] float lifeTime = 10f;
+    private Rigidbody rb;
+    private bool isThrown = false;
 
     private void Start()
     {
-        if (lifeTime == 0) lifeTime = 10f;
-
-        Destroy(gameObject, lifeTime);
-
         rb = GetComponent<Rigidbody>();
-
-        thrower = FindObjectOfType<Throwing>();
-
-        gravity = thrower.Gravity;
-        time = 0f;
-
-        initialVelocity = thrower.InitialThrowingVelocity;
-
-        // convert deg to rad
-        alpha = thrower.TurningAngle * Mathf.PI / 180f;
-        beta = (90 - thrower.TurningAngle) * Mathf.PI / 180f;
-        theta = thrower.Theta;
-
-        cosAlpha = Mathf.Cos(alpha);
-        cosBeta = Mathf.Cos(beta);
-        cosTheta = Mathf.Cos(theta);
-        sinTheta = Mathf.Sin(theta);
-
-        initialVelocityX = initialVelocity * cosTheta * cosBeta;
-        initialVelocityY = initialVelocity * sinTheta;
-        initialVelocityZ = initialVelocity * cosTheta * cosAlpha;
-    }
-
-
-    // physics logic execution
-    private void FixedUpdate()
-    {
-        if (timeSinceLastFrame > frameTime)
+        if (rb == null)
         {
-            UpdateDisplacement();
-            timeSinceLastFrame = 0f;
+            Debug.LogError("Rigidbody component missing on Grenade.");
         }
 
-        timeSinceLastFrame += Time.deltaTime;
+        // Destroy the grenade after its lifetime
+        Destroy(gameObject, lifeTime);
     }
 
-    // position                 // rotation
-    // x left right             // x rotates up down
-    // y up down                // y rotates left right
-    // z forward backward       // z twist
-    private void UpdateDisplacement()
+    // Method to apply force and visualize the direction of the throw
+    public void ApplyForce(Vector3 initialForce)
     {
-        time += frameTime;
+        if (rb != null && !isThrown)
+        {
+            // Apply the force
+            rb.AddForce(initialForce, ForceMode.VelocityChange);
+            isThrown = true;
 
-        // changes xz
-        displacementZ = transform.position.z + initialVelocityZ * time;
-        displacementX = transform.position.x + initialVelocityX * time;
+            // Draw a debug line to show the grenade's direction, length based on velocity magnitude
+            float forceMagnitude = initialForce.magnitude;  // Get the magnitude of the force (velocity)
+            Debug.DrawLine(transform.position, transform.position + initialForce.normalized * forceMagnitude, Color.red, 2f);
 
-        // changes y
-        displacementY = transform.position.y + (initialVelocityY * time) - (0.5f * gravity * time * time);
-
-        transform.position = new Vector3(displacementX, displacementY, displacementZ);
+            // Log the direction and magnitude for debugging
+            Debug.Log("Grenade direction: " + initialForce.normalized + ", Velocity magnitude: " + forceMagnitude);
+        }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        Destroy(gameObject);
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    // Handle grenade impact, for example, destroy the grenade or trigger explosion effects
+    //    Destroy(gameObject);
+    //}
 }
