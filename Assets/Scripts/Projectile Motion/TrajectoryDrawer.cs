@@ -3,26 +3,33 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class TrajectoryDrawer : MonoBehaviour
 {
+    [Header("Trajectory Settings")]
     /// <summary>
     /// Number of points used to draw the trajectory.
     /// Higher values result in a smoother trajectory but may impact performance.
     /// </summary>
-    public int trajectoryResolution = 30;
+    [Tooltip("Number of points used to draw the trajectory. Higher values result in a smoother trajectory but may impact performance.")]
+    [SerializeField] private int trajectoryResolution = 30;
 
     /// <summary>
     /// Layers that the trajectory should consider for collisions (e.g., ground, walls, obstacles).
     /// </summary>
-    public LayerMask collisionLayers;
+    [Tooltip("Layers that the trajectory should consider for collisions (e.g., ground, walls, obstacles).")]
+    [SerializeField] private LayerMask collisionLayers;
 
+    [Header("Hit Point Settings")]
     /// <summary>
     /// Transform that will be positioned at the hit point when the trajectory collides with an object.
     /// </summary>
-    public Transform hitPoint;
+    [Tooltip("Transform that will be positioned at the hit point when the trajectory collides with an object.")]
+    [SerializeField] private Transform hitPoint;
 
+    [Header("Line Renderer Settings")]
     /// <summary>
     /// Gradient to control the color of the trajectory over time.
     /// </summary>
-    public Gradient gradient;
+    [Tooltip("Gradient to control the color of the trajectory over time.")]
+    [SerializeField] private Gradient gradient;
 
     // Reference to the LineRenderer component used to draw the trajectory
     private LineRenderer lineRenderer;
@@ -32,10 +39,6 @@ public class TrajectoryDrawer : MonoBehaviour
     private Vector3 lastInitialVelocity;
     private Vector3 lastGravity;
 
-    /// <summary>
-    /// Unity's Start method, called once when the script is initialized.
-    /// Sets up the LineRenderer component and assigns default material and gradient if needed.
-    /// </summary>
     private void Start()
     {
         // Get the LineRenderer component attached to the same GameObject

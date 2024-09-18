@@ -2,13 +2,19 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    // This script no longer handles launching or physics parameters.
-    // The spawner/thrower will manage the launching mechanics.
-
-    // Optional: Still keep collision logic here
-    void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        // Handle what happens when the projectile hits something
+        HandleCollision(collision);
+    }
+
+    /// <summary>
+    /// Handles the logic for when the projectile hits something.
+    /// Currently destroys the projectile but can be extended for additional behavior.
+    /// </summary>
+    /// <param name="collision">Information about the collision.</param>
+    private void HandleCollision(Collision collision)
+    {
+        // Optional: Add logic here for what happens when the projectile hits something (e.g., dealing damage, spawning effects)
         Destroy(gameObject); // Destroy the projectile on impact
     }
 }
