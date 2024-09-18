@@ -6,31 +6,29 @@ using UnityEngine.AI;
 public class Running : MonoBehaviour
 {
     [SerializeField] bool run;
-    [SerializeField] float speed;
+    [SerializeField] float speed = 5f;
+    [SerializeField] float radius = 10f;
+    [SerializeField] float destinationTolerance = 2f;
     [SerializeField] Transform mapCenter;
-    [SerializeField] float radius;
-    [SerializeField] float destinationTolerance;
     [SerializeField] Transform directionIndicator;  // Object under the runner hierarchy that will show the running direction
+    [SerializeField] Transform targetIndicator;
 
-    NavMeshAgent agent;
-    Vector3 currentDestination;
+    private NavMeshAgent agent;
+    private Vector3 currentDestination;
 
     public Vector3 CurrentVelocity { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
-        Initiate();
+        agent = GetComponent<NavMeshAgent>();
     }
 
-    private void Initiate()
+    private void Start()
     {
         if (!mapCenter) { Debug.Log("Map Center is not referenced."); return; }
-        if (speed == 0) speed = 5f;
-        if (radius == 0) radius = 10f;
-        if (destinationTolerance == 0) destinationTolerance = 2f;
 
-        agent = GetComponent<NavMeshAgent>();
         agent.speed = speed;
+
         SetDestination();
     }
 
@@ -51,14 +49,15 @@ public class Running : MonoBehaviour
 
     private void SetDestination()
     {
-        currentDestination = generateRandomPosition();
+        currentDestination = GenerateRandomPosition();
         agent.destination = currentDestination;
+        SetTargetIndicatorPosition(agent.destination);
     }
 
-    Vector3 generateRandomPosition()
+    private Vector3 GenerateRandomPosition()
     {
         float x, y, z;
-        Vector3 randomPosition = Vector3.zero;
+        Vector3 randomPosition;
 
         do
         {
@@ -70,5 +69,13 @@ public class Running : MonoBehaviour
         while (Vector3.Distance(mapCenter.position, randomPosition) <= radius);
 
         return randomPosition;
+    }
+
+    private void SetTargetIndicatorPosition(Vector3 position)
+    {
+        if (targetIndicator != null)
+        {
+            targetIndicator.transform.position = position;
+        }
     }
 }
