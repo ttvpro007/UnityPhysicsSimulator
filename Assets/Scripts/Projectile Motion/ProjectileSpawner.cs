@@ -48,7 +48,7 @@ public class ProjectileSpawner : MonoBehaviour
 
     private Vector3 launchDirection;
     private Vector3 initialVelocity;
-    private float launchForce;
+    [SerializeField] private float launchForce;
 
     /// <summary>
     /// Sets the launch force, clamping it within the min and max limits.
