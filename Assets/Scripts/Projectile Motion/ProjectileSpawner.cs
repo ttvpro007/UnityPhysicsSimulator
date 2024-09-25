@@ -1,3 +1,4 @@
+using Obvious.Soap;
 using UnityEngine;
 
 public class ProjectileSpawner : MonoBehaviour
@@ -7,62 +8,55 @@ public class ProjectileSpawner : MonoBehaviour
     /// The projectile prefab to spawn.
     /// </summary>
     [Tooltip("The projectile prefab to spawn.")]
-    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] protected GameObject projectilePrefab;
 
     /// <summary>
     /// The point where the projectile will spawn.
     /// </summary>
     [Tooltip("The point where the projectile will spawn.")]
-    [SerializeField] private Transform spawnPoint;
+    [SerializeField] protected Transform spawnPoint;
 
     /// <summary>
-    /// Minimum force to apply to the projectile.
+    /// Adjustable launch force.
     /// </summary>
-    [Tooltip("Minimum force to apply to the projectile.")]
-    [SerializeField] private float launchForceMin = 10f;
-
-    /// <summary>
-    /// Maximum force to apply to the projectile.
-    /// </summary>
-    [Tooltip("Maximum force to apply to the projectile.")]
-    [SerializeField] private float launchForceMax = 100f;
+    [Tooltip("Adjustable launch force.")]
+    [SerializeField] protected FloatVariable launchForce;
 
     /// <summary>
     /// Adjustable angle in degrees for upward launch.
     /// </summary>
     [Tooltip("Adjustable angle in degrees for upward launch.")]
-    [SerializeField] private float upwardAngle = 45f;
+    [SerializeField] protected FloatVariable upwardAngle;
 
     /// <summary>
     /// Time step for trajectory calculation.
     /// </summary>
     [Tooltip("Time step for trajectory calculation.")]
-    [SerializeField] private float trajectoryTimeStep = 5f;
+    [SerializeField] protected float trajectoryTimeStep = 5f;
 
     [Header("References")]
     /// <summary>
     /// Reference to the TrajectoryDrawer component.
     /// </summary>
     [Tooltip("Reference to the TrajectoryDrawer component.")]
-    [SerializeField] private TrajectoryDrawer trajectoryDrawer;
-
-    private Vector3 launchDirection;
-    private Vector3 initialVelocity;
-    [SerializeField] private float launchForce;
+    [SerializeField] protected TrajectoryDrawer trajectoryDrawer;
 
     /// <summary>
-    /// Sets the launch force, clamping it within the min and max limits.
+    /// Speed at which the thrower rotates.
+    /// </summary>
+    [Tooltip("Speed at which the thrower rotates.")]
+    [SerializeField] protected float rotationSpeed = 5f;  // Speed at which the thrower rotates to face the runner
+
+    protected Vector3 launchDirection;
+    private Vector3 initialVelocity;
+
+    /// <summary>
+    /// Sets the launch force.
     /// </summary>
     /// <param name="launchForce">The desired launch force.</param>
     public void SetLaunchForce(float launchForce)
     {
-        this.launchForce = Mathf.Clamp(launchForce, launchForceMin, launchForceMax);
-    }
-
-    private void Start()
-    {
-        // Initialize the launch force to the minimum value at the start
-        launchForce = launchForceMin;
+        this.launchForce.Value = launchForce;
     }
 
     private void Update()
@@ -73,29 +67,30 @@ public class ProjectileSpawner : MonoBehaviour
         // Draw the trajectory in real-time
         DrawTrajectory();
 
-        // Spawn the projectile when the left mouse button is clicked
-        if (Input.GetMouseButtonDown(0))
-        {
-            SpawnProjectile();
-        }
+        RotateThrower();
+    }
+
+    public void SetInitialVelocity(Vector3 initialVelocity)
+    {
+        this.initialVelocity = initialVelocity;
     }
 
     /// <summary>
     /// Calculates the launch direction and initial velocity based on the current parameters.
     /// </summary>
-    private void CalculateLaunchParameters()
+    protected virtual void CalculateLaunchParameters()
     {
         // Calculate launch direction with the upward angle
-        launchDirection = Quaternion.AngleAxis(-upwardAngle, spawnPoint.right) * spawnPoint.forward;
+        launchDirection = Quaternion.AngleAxis(-upwardAngle.Value, spawnPoint.right) * spawnPoint.forward;
 
         // Calculate initial velocity based on the launch force and direction
-        initialVelocity = launchDirection.normalized * launchForce;
+        SetInitialVelocity(launchDirection.normalized * launchForce.Value);
     }
 
     /// <summary>
     /// Draws the trajectory in real-time using the TrajectoryDrawer component.
     /// </summary>
-    private void DrawTrajectory()
+    protected virtual void DrawTrajectory()
     {
         if (trajectoryDrawer == null || spawnPoint == null) return;
 
@@ -103,10 +98,23 @@ public class ProjectileSpawner : MonoBehaviour
         trajectoryDrawer.DrawTrajectory(spawnPoint.position, initialVelocity, trajectoryTimeStep, Physics.gravity);
     }
 
+    // Function to rotate the thrower to face the runner
+    private void RotateThrower()
+    {
+        Vector3 directionToTarget = initialVelocity.normalized;
+        directionToTarget.y = 0f;  // Keep the direction strictly in the XZ plane
+
+        // Calculate the target rotation to look at the runner
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+
+        // Smoothly rotate the thrower towards the target rotation
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
     /// <summary>
     /// Spawns the projectile and applies the calculated launch force to it.
     /// </summary>
-    private void SpawnProjectile()
+    public void SpawnProjectile()
     {
         if (projectilePrefab == null || spawnPoint == null) return;
 

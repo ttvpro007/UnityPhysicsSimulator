@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Obvious.Soap;
+using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
