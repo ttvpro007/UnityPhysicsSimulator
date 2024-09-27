@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 223ef16aeef314faabab5fdbeed5d287, type: 3}
+  m_Name: Fist On Metal
+  m_EditorClassIdentifier: 
+  outputName: Fist_On_Metal
+  audioLayers:
+  - clips:
+    - {fileID: 8300000, guid: d355f2c0655e74edf813eb88836e481d, type: 3}
+    - {fileID: 8300000, guid: c5d0226dc4f9345c4a0192192caf5c7a, type: 3}
+    - {fileID: 8300000, guid: ccb8698581ea14a9eaa2b4b13eb30490, type: 3}
+    - {fileID: 8300000, guid: 08803aa7038d94987915b4d2022ce95b, type: 3}
+    - {fileID: 8300000, guid: 563a2eb7180a94251bdcd39698e393ac, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Fist
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 0.92811793
+    shortestClipLength: 0.6947846
+    parent: {fileID: 11400000}
+  - clips:
+    - {fileID: 8300000, guid: 9b1951864e55042419d36626fbf984c9, type: 3}
+    - {fileID: 8300000, guid: 31e024ce3ed0a4b8885a7cfadbcf4992, type: 3}
+    - {fileID: 8300000, guid: f3a27f675d71c448c937b8c1552fbf7f, type: 3}
+    - {fileID: 8300000, guid: 15db56fb478b54ba584e54368f943195, type: 3}
+    - {fileID: 8300000, guid: 9eaf9ecc10af54992a32818ffc712ce1, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Impact
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 0.92811793
+    shortestClipLength: 0.6947846
+    parent: {fileID: 11400000}
+  - clips:
+    - {fileID: 8300000, guid: 776cd4f8692904fb9a8025307bb7a143, type: 3}
+    - {fileID: 8300000, guid: f1c17fae8fba34743ae23e281e8444a8, type: 3}
+    - {fileID: 8300000, guid: 6fc43498e12c24766ba73ed579e07532, type: 3}
+    - {fileID: 8300000, guid: bffb37355edb34293ae4fae16a83aad2, type: 3}
+    - {fileID: 8300000, guid: 145daa7480ed34590adc3033598a580a, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Metal
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 0.92811793
+    shortestClipLength: 0.6947846
+    parent: {fileID: 11400000}
+  displayInspector: 0
+  showFullEditor: 0
+  longestClipLength: 0.92811793
+  shortestClipLength: 0.6947846

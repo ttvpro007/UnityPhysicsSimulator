@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 223ef16aeef314faabab5fdbeed5d287, type: 3}
+  m_Name: Sword_On_Flesh
+  m_EditorClassIdentifier: 
+  outputName: Sword_On_Flesh
+  audioLayers:
+  - clips:
+    - {fileID: 8300000, guid: bf41174656142473e91f5a9cd18a0a6f, type: 3}
+    - {fileID: 8300000, guid: 253e5321d96024a238d5ba8c5af88d16, type: 3}
+    - {fileID: 8300000, guid: 5a42c7d8eeef34136900d10be894483b, type: 3}
+    - {fileID: 8300000, guid: 0d37e6c4b00564acb902eac4803eee82, type: 3}
+    - {fileID: 8300000, guid: 07657fe7b15f249de9e254b7f3dc9646, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Flesh
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 1.0718594
+    shortestClipLength: 0.7353968
+    parent: {fileID: 11400000}
+  - clips:
+    - {fileID: 8300000, guid: fbb5ba0f8f20f4ddd96f28ec955681b8, type: 3}
+    - {fileID: 8300000, guid: b4b10ba670b8f494eb8ee808fa885948, type: 3}
+    - {fileID: 8300000, guid: 17593570c8fcd400caf55fb28f12eb58, type: 3}
+    - {fileID: 8300000, guid: be2ab0616568f489aa6a1bc0ddcc03c4, type: 3}
+    - {fileID: 8300000, guid: fe9978d83581c412a9f63979c335eaa7, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Impact
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 1.0718594
+    shortestClipLength: 0.7353968
+    parent: {fileID: 11400000}
+  - clips:
+    - {fileID: 8300000, guid: 6c400571b758a4c05805c25cfbc12151, type: 3}
+    - {fileID: 8300000, guid: 9765752cd06794a3a98fe018a07fea77, type: 3}
+    - {fileID: 8300000, guid: fcf61d0a3b1bc4077ac796b2dbaa569d, type: 3}
+    - {fileID: 8300000, guid: eb591cff4e1a64053b721753ad872766, type: 3}
+    - {fileID: 8300000, guid: 1bf6ab81b54a64e8a8e1a0dcb7f7d607, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Sword
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 1.0718594
+    shortestClipLength: 0.7353968
+    parent: {fileID: 11400000}
+  displayInspector: 0
+  showFullEditor: 0
+  longestClipLength: 1.0718594
+  shortestClipLength: 0.7353968

@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 223ef16aeef314faabab5fdbeed5d287, type: 3}
+  m_Name: Axe on Flesh
+  m_EditorClassIdentifier: 
+  outputName: Axe_on_Flesh
+  audioLayers:
+  - clips:
+    - {fileID: 8300000, guid: 95e22665fb033439bad75d39e8f612f8, type: 3}
+    - {fileID: 8300000, guid: d4d8b229e90c641068add98024909510, type: 3}
+    - {fileID: 8300000, guid: cdbfea9e219f3418dac663c2b0c3f5b4, type: 3}
+    - {fileID: 8300000, guid: 2d04460e923d84eeb9ce7276227acb1c, type: 3}
+    - {fileID: 8300000, guid: 851a5dd41c4c842a1b7fd113767a3609, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Axe
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 1.25
+    shortestClipLength: 0.6953061
+    parent: {fileID: 11400000}
+  - clips:
+    - {fileID: 8300000, guid: ba3e7a97854324659b1de19f4d7a88b5, type: 3}
+    - {fileID: 8300000, guid: b02d96375c7f347abb66f7e42773f180, type: 3}
+    - {fileID: 8300000, guid: 34c492e6292824e6f8ce5ae74c39f258, type: 3}
+    - {fileID: 8300000, guid: 3d32ae92ca5b14e83a13b48110dd6bbf, type: 3}
+    - {fileID: 8300000, guid: 705cc91c0b9ac4bf088c96b7d1fc4e43, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Flesh
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 1.25
+    shortestClipLength: 0.6953061
+    parent: {fileID: 11400000}
+  - clips:
+    - {fileID: 8300000, guid: 88b787454d6e8461da4c3cba9a8c4809, type: 3}
+    - {fileID: 8300000, guid: b833d57a31e4844c2b19a2735e6c1175, type: 3}
+    - {fileID: 8300000, guid: 5cb1332a2268443a39013fbe200bdb8d, type: 3}
+    - {fileID: 8300000, guid: 602a267a137834a279b5892de0ed3447, type: 3}
+    - {fileID: 8300000, guid: 2e021dda37fd54a74988ab2eeaebfcb4, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Impact
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 1.25
+    shortestClipLength: 0.6953061
+    parent: {fileID: 11400000}
+  displayInspector: 0
+  showFullEditor: 0
+  longestClipLength: 1.25
+  shortestClipLength: 0.6953061

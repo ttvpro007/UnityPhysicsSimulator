@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 223ef16aeef314faabab5fdbeed5d287, type: 3}
+  m_Name: Axe On Wood
+  m_EditorClassIdentifier: 
+  outputName: Axe_On_Wood
+  audioLayers:
+  - clips:
+    - {fileID: 8300000, guid: 0d1bb56ff5b284a289acf6ec26f07ac7, type: 3}
+    - {fileID: 8300000, guid: 917ec26d7124b4d74b6868daf087a44e, type: 3}
+    - {fileID: 8300000, guid: 3c206b633b1d54eb6a7a06273520c018, type: 3}
+    - {fileID: 8300000, guid: 1ac3d8a1f9e794b7fac64295662a15be, type: 3}
+    - {fileID: 8300000, guid: 15cbf13017ff148c38d13ce46721957e, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Axe
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 0.84478456
+    shortestClipLength: 0.7260317
+    parent: {fileID: 11400000}
+  - clips:
+    - {fileID: 8300000, guid: fe676dc4246674e6aa66b2f21fe7bfe8, type: 3}
+    - {fileID: 8300000, guid: 5a59091bfb8bb4dc08ceaf44910b7fad, type: 3}
+    - {fileID: 8300000, guid: a30d46b06560e4d648a28105f6e660dd, type: 3}
+    - {fileID: 8300000, guid: 39847295e34984a578277878fb4a28ec, type: 3}
+    - {fileID: 8300000, guid: 1647056dc7d73438486597f5d99ad1e0, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Impact
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 0.84478456
+    shortestClipLength: 0.7260317
+    parent: {fileID: 11400000}
+  - clips:
+    - {fileID: 8300000, guid: c55db3620b0fe427092ddc5924541299, type: 3}
+    - {fileID: 8300000, guid: 02d0d49f36994445c81b8998f46c7eb0, type: 3}
+    - {fileID: 8300000, guid: b22a8ef4d2b884afcadafc6517818a93, type: 3}
+    - {fileID: 8300000, guid: a9570e46632df429d9e1b1270413e7bb, type: 3}
+    - {fileID: 8300000, guid: 6b77bf01c4e704f168916512af13f6cc, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Wood
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 0.84478456
+    shortestClipLength: 0.7260317
+    parent: {fileID: 11400000}
+  displayInspector: 0
+  showFullEditor: 0
+  longestClipLength: 0.84478456
+  shortestClipLength: 0.7260317

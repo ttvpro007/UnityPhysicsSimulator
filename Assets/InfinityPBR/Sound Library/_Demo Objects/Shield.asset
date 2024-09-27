@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 223ef16aeef314faabab5fdbeed5d287, type: 3}
+  m_Name: Shield
+  m_EditorClassIdentifier: 
+  outputName: Shield
+  audioLayers:
+  - clips:
+    - {fileID: 8300000, guid: b6d60c0a6649f42149bb9fd28fb8d1b9, type: 3}
+    - {fileID: 8300000, guid: c17b63eb33be94ee7a1d1f10c00708a0, type: 3}
+    - {fileID: 8300000, guid: e445e5f348e364c4aaacb3b254e5a5d3, type: 3}
+    - {fileID: 8300000, guid: dcce514d53e974f6b811b5c33150f795, type: 3}
+    - {fileID: 8300000, guid: f7b4d7f83621843abb99ee2c3d98af97, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Flesh
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 0.7020635
+    shortestClipLength: 0.6739456
+    parent: {fileID: 11400000}
+  - clips:
+    - {fileID: 8300000, guid: ed48449dfdcfc4ccba99a511d0bd1f13, type: 3}
+    - {fileID: 8300000, guid: 2ea92b43e13bc465db37a7daa887291c, type: 3}
+    - {fileID: 8300000, guid: ebf1bfd5808c343f28f0dec71704419a, type: 3}
+    - {fileID: 8300000, guid: 1631126e630514c068fe6d1262fb40bd, type: 3}
+    - {fileID: 8300000, guid: 69ddfff470d4742d1bab74ba74caeed0, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Impact
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 0.7020635
+    shortestClipLength: 0.6739456
+    parent: {fileID: 11400000}
+  - clips:
+    - {fileID: 8300000, guid: b903cf4f6c7fc422d89574907d958f14, type: 3}
+    - {fileID: 8300000, guid: 4462924283ef2496c9c9b25629e8222f, type: 3}
+    - {fileID: 8300000, guid: 8274a67c97ddd4b40a4ea68e3a14a3e0, type: 3}
+    - {fileID: 8300000, guid: 1c074a6fbd57842058ab58a1c35ec671, type: 3}
+    - {fileID: 8300000, guid: 6a8d82de8ebc84711a03e72903cace64, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Shield
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 0.7020635
+    shortestClipLength: 0.6739456
+    parent: {fileID: 11400000}
+  displayInspector: 0
+  showFullEditor: 0
+  longestClipLength: 0.7020635
+  shortestClipLength: 0.6739456

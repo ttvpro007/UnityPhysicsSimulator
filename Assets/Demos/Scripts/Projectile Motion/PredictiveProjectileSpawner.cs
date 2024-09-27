@@ -44,6 +44,10 @@ public class PredictiveProjectileSpawner : ProjectileSpawner
         // y = v0y * t - 0.5 * g * t^2 => v0y = (y + 0.5 * g * t^2) / t
         float v0y = (y + 0.5f * g * t * t) / t;
 
+        // vy = tan (theta) * vx
+        //float theta = upwardAngle * Mathf.Deg2Rad;
+        //float v0y = Mathf.Tan(theta) * v0x;
+
         // Calculate horizontal launch direction (normalized to keep direction intact)
         Vector3 horizontalLaunchDirection = new Vector3(displacement.x, 0, displacement.z).normalized;
 

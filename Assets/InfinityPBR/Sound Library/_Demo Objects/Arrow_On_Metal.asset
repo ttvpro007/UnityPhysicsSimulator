@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 223ef16aeef314faabab5fdbeed5d287, type: 3}
+  m_Name: Arrow_On_Metal
+  m_EditorClassIdentifier: 
+  outputName: Arrow_On_Metal
+  audioLayers:
+  - clips:
+    - {fileID: 8300000, guid: e68cecfaeda014e6988d899332a6740c, type: 3}
+    - {fileID: 8300000, guid: 06c0e2590c33b40cf8418aa7bf0c7ecf, type: 3}
+    - {fileID: 8300000, guid: 400caa746f24f4363b4f569c414bcf2e, type: 3}
+    - {fileID: 8300000, guid: 8721500e1e8d24d53aec6694d16c6a75, type: 3}
+    - {fileID: 8300000, guid: 7f6cb94d86d344b2ca627065a028859e, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Arrow
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 0.7708163
+    shortestClipLength: 0.6838322
+    parent: {fileID: 11400000}
+  - clips:
+    - {fileID: 8300000, guid: 234119b9a581142b2bda14cfbcf7734f, type: 3}
+    - {fileID: 8300000, guid: 162c42b2a20d74f89bfff48cbcff385b, type: 3}
+    - {fileID: 8300000, guid: 7d5cba9c4136f407286464df26792297, type: 3}
+    - {fileID: 8300000, guid: a8e81bd6d3ba0475a896586949aa0a80, type: 3}
+    - {fileID: 8300000, guid: 6e9170f03e55f4c329eecdc1af491441, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Metal
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 0.7708163
+    shortestClipLength: 0.6838322
+    parent: {fileID: 11400000}
+  - clips:
+    - {fileID: 8300000, guid: f9031f7584df0456bb576c4956744c05, type: 3}
+    - {fileID: 8300000, guid: b9e9b8539b28845fea9582297dfa7c8a, type: 3}
+    - {fileID: 8300000, guid: 5d1ceaf95a43948f08050c572a21d6c6, type: 3}
+    - {fileID: 8300000, guid: d32ca50592a2a4e579007df0e733c304, type: 3}
+    - {fileID: 8300000, guid: 6d246934e233d45ec974189aa6706952, type: 3}
+    expanded: 1
+    clipNumber: 0
+    name: Sub
+    volume: 1
+    delay: 0
+    samples: 
+    bytes: 
+    sampleCount: 0
+    channelCount: 0
+    delayCount: 0
+    onClip: 0
+    longestClipLength: 0.7708163
+    shortestClipLength: 0.6838322
+    parent: {fileID: 11400000}
+  displayInspector: 0
+  showFullEditor: 0
+  longestClipLength: 0.7708163
+  shortestClipLength: 0.6838322
