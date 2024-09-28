@@ -21,6 +21,6 @@ MonoBehaviour:
   _saved: 0
   _defaultValue: 0
   _resetOn: 0
-  _runtimeValue: 0
+  _runtimeValue: 100
   _isClamped: 0
   _minMax: {x: 0, y: 3.4028235e+38}
