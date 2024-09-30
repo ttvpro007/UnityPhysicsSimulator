@@ -7,7 +7,7 @@ public class Projectile : MonoBehaviour
     /// The amount of damage this projectile deals upon impact.
     /// </summary>
     [Tooltip("The amount of damage this projectile deals upon impact.")]
-    [SerializeField] private int damageAmount;
+    [SerializeField] protected int damageAmount;
 
     [SerializeField] private GameObject hitPointPrefab;
 
@@ -19,7 +19,7 @@ public class Projectile : MonoBehaviour
     private Vector3 hitPointPosition;
     private GameObject hitPointInstance;
 
-    private void Start()
+    protected virtual void Start()
     {
         hitPointInstance = Instantiate(hitPointPrefab, hitPointPosition, Quaternion.identity);
     }
@@ -40,7 +40,7 @@ public class Projectile : MonoBehaviour
     /// The projectile is destroyed upon collision.
     /// </summary>
     /// <param name="collision">Information about the collision, including the object hit.</param>
-    private void HandleCollision(Collision collision)
+    protected virtual void HandleCollision(Collision collision)
     {
         // Check if the object hit has a Health component
         if (collision.gameObject.TryGetComponent<Health>(out var health))
@@ -49,8 +49,13 @@ public class Projectile : MonoBehaviour
             DealDamage(health);
         }
 
+        Destroy();
+    }
+
+    protected virtual void Destroy()
+    {
         Destroy(hitPointInstance);
-        
+
         // Destroy the projectile after collision
         Destroy(gameObject);
     }
