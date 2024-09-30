@@ -1,4 +1,5 @@
 ﻿using Obvious.Soap;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -61,6 +62,8 @@ public class Running : MonoBehaviour
     /// </summary>
     public Vector3 CurrentVelocity { get; private set; }
 
+    private Rigidbody rb;
+
     private void Awake()
     {
         // Cache the NavMeshAgent component for performance
@@ -70,6 +73,8 @@ public class Running : MonoBehaviour
             Debug.LogError("NavMeshAgent component missing from this GameObject.");
             enabled = false;
         }
+
+        rb = GetComponent<Rigidbody>();
     }
 
     private void Start()
@@ -164,5 +169,45 @@ public class Running : MonoBehaviour
             // Align the direction indicator with the current movement direction
             directionIndicator.forward = agent.velocity.normalized;
         }
+    }
+
+    public void AddExplosionForce(float explosionForce, Vector3 explosionPosition, float explosionRadius)
+    {
+        if (agent != null && rb != null)
+        {
+            // Disable NavMeshAgent
+            agent.enabled = false;
+
+            // Make Rigidbody dynamic to apply physics
+            rb.isKinematic = false;
+
+            // Add explosion force
+            rb.AddExplosionForce(explosionForce, explosionPosition, explosionRadius);
+
+            // Start coroutine to re-enable NavMeshAgent once possible
+            StartCoroutine(EnableNavMeshAgentWhenPossible());
+        }
+    }
+
+    private IEnumerator EnableNavMeshAgentWhenPossible()
+    {
+        // Wait for a fixed duration first before checking if on the ground
+        yield return new WaitForSeconds(1f);
+
+        // Wait until the agent is grounded (not in the air)
+        while (!IsGrounded())
+        {
+            yield return null;  // Wait for the next frame
+        }
+
+        // Re-enable NavMeshAgent
+        rb.isKinematic = true;  // Disable physics control to give control back to the agent
+        agent.enabled = true;
+    }
+
+    private bool IsGrounded()
+    {
+        // Check if the agent is on the ground
+        return Physics.Raycast(transform.position, Vector3.down, 1.1f);
     }
 }

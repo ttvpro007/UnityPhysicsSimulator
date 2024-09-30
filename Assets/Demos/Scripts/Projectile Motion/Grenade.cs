@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Grenade : Projectile
 {
-    [SerializeField] private float lifeTime = 10f;
     [SerializeField] private GameObject explosionEffect;      // Prefab for the explosion visual effect
     [SerializeField] private float explosionDelay = 3f;       // Delay before the grenade explodes
     [SerializeField] private float explosionRadius = 5f;      // Radius of the explosion effect
@@ -44,9 +43,9 @@ public class Grenade : Projectile
         foreach (Collider nearbyObject in colliders)
         {
             // Apply force to rigidbodies
-            if (nearbyObject.TryGetComponent<Rigidbody>(out var rb))
+            if (nearbyObject.TryGetComponent<Running>(out var runner))
             {
-                rb.AddExplosionForce(explosionForce, transform.position, explosionRadius);
+                runner.AddExplosionForce(explosionForce, transform.position, explosionRadius);
             }
 
             // Apply damage to enemy health scripts
