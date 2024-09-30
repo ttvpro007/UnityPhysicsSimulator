@@ -51,7 +51,7 @@ public class Grenade : Projectile
             // Apply damage to enemy health scripts
             if (nearbyObject.TryGetComponent<Health>(out var health))
             {
-                health.TakeDamage(damageAmount);
+                health.TakeDamage((int)GetCalculatedDamageAmount());
             }
         }
 

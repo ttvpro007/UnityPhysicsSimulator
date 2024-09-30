@@ -117,10 +117,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1d6b7b6ecd00224f9914f3227e94c60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 0
+  damageAmount: 10
+  modifierPercentage: {x: -0.3, y: 0.3}
   hitPointPrefab: {fileID: 4107697869088053130, guid: 0d7e8fc040bcc8942911bc14a194a75c,
     type: 3}
-  lifeTime: 10
   explosionEffect: {fileID: 2433282508537954060, guid: 3ef3ae421f71c5c4e97fe12dc2fc6312,
     type: 3}
   explosionDelay: 5
