@@ -43,10 +43,10 @@ public class Grenade : Projectile
         foreach (Collider nearbyObject in colliders)
         {
             // Apply force to rigidbodies
-            if (nearbyObject.TryGetComponent<Running>(out var runner))
-            {
-                runner.AddExplosionForce(explosionForce, transform.position, explosionRadius);
-            }
+            //if (nearbyObject.TryGetComponent<Running>(out var runner))
+            //{
+            //    runner.AddExplosionForce(explosionForce, transform.position, explosionRadius);
+            //}
 
             // Apply damage to enemy health scripts
             if (nearbyObject.TryGetComponent<Health>(out var health))
