@@ -38,7 +38,7 @@ public class SliderSOAPHelper : MonoBehaviour
                 // Bind TMP
                 var bind = valueField.GetComponent<BindTextMeshPro>();
                 bind.Type = CustomVariableType.Float;
-                bind.DecimalAmount = 2;
+                bind.DecimalAmount = 1;
 
                 Type type = typeof(BindTextMeshPro);
                 FieldInfo fieldInfo = type.GetField("_floatVariable", BindingFlags.NonPublic | BindingFlags.Instance);

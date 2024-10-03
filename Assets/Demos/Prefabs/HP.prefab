@@ -55,9 +55,9 @@ MonoBehaviour:
   faceCameraView: 1
   lookAtCamera: 0
   renderThroughWalls: 0
-  consistentScreenSize: 0
+  consistentScreenSize: 1
   distanceScalingSettings:
-    baseDistance: 15
+    baseDistance: 30
     closeDistance: 5
     farDistance: 50
     closeScale: 2
@@ -202,23 +202,23 @@ MonoBehaviour:
   enableCrossScaleFadeIn: 1
   crossScaleFadeIn: {x: 1, y: 1.5}
   enableShakeFadeIn: 1
-  shakeOffsetFadeIn: {x: 0, y: 2.5}
+  shakeOffsetFadeIn: {x: 0, y: 1}
   shakeFrequencyFadeIn: 4
   durationFadeOut: 0.2
-  enableOffsetFadeOut: 1
+  enableOffsetFadeOut: 0
   offsetFadeOut: {x: 0.5, y: 0}
-  enableScaleFadeOut: 0
-  scaleFadeOut: {x: 2, y: 2}
+  enableScaleFadeOut: 1
+  scaleFadeOut: {x: 0.6, y: 1.4}
   enableCrossScaleFadeOut: 0
   crossScaleFadeOut: {x: 1, y: 1.5}
-  enableShakeFadeOut: 0
-  shakeOffsetFadeOut: {x: 0, y: 1.5}
-  shakeFrequencyFadeOut: 4
+  enableShakeFadeOut: 1
+  shakeOffsetFadeOut: {x: 0, y: -1}
+  shakeFrequencyFadeOut: 2
   enableLerp: 1
   lerpSettings:
     speed: 5
-    minX: -0.4
-    maxX: 0.4
+    minX: -0.3
+    maxX: 0.3
     minY: 0.5
     maxY: 1
     randomFlip: 0
@@ -296,7 +296,7 @@ MonoBehaviour:
     fromNumber: 0
     toNumber: 1000
     fromScale: 1
-    toScale: 2
+    toScale: 1.5
   enableScaleOverTime: 0
   scaleOverTime:
     serializedVersion: 2
@@ -326,13 +326,13 @@ MonoBehaviour:
   defaultOrthographicSize: 5
   maxOrthographicSize: 1.5
   orthographicCamera: {fileID: 0}
-  spamGroup: 
-  enableCombination: 0
+  spamGroup: Default
+  enableCombination: 1
   combinationSettings:
     method: 0
-    maxDistance: 10
-    spawnDelay: 0.2
-    absorbDuration: 0.4
+    maxDistance: 5
+    spawnDelay: 0.3
+    absorbDuration: 0.3
     scaleCurve:
       serializedVersion: 2
       m_Curve:
@@ -379,15 +379,6 @@ MonoBehaviour:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.5
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
         time: 1
         value: 0
         inSlope: 0
@@ -400,11 +391,11 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     moveToAbsorber: 1
-    teleportToAbsorber: 0
+    teleportToAbsorber: 1
     absorberScaleFactor: 1.5
     absorberScaleFade: 15
     instantGain: 0
-    bonusLifetime: 1
+    bonusLifetime: 0.5
   enableDestruction: 0
   destructionSettings:
     maxDistance: 2
@@ -458,20 +449,20 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  enableCollision: 0
+  enableCollision: 1
   collisionSettings:
-    radius: 0.5
-    pushFactor: 1
-    desiredDirection: {x: 0, y: 0, z: 0}
+    radius: 5
+    pushFactor: 0.15
+    desiredDirection: {x: 0, y: -1, z: 0}
   enablePush: 0
   pushSettings:
-    radius: 4
-    pushOffset: 0.8
+    radius: 3
+    pushOffset: 1
   updateDelay: 0.0125
   enablePooling: 0
   poolSize: 50
   disableOnSceneLoad: 1
-  editorLastFont: Smear Outline3D
+  editorLastFont: Comic3D
   position: {x: 0, y: 0, z: 0}
 --- !u!210 &4609174569658660947
 SortingGroup:
@@ -538,7 +529,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8538190908439236108, guid: c7df671f511488e419406dc4ec28023d, type: 2}
+  - {fileID: 882574637698120323, guid: 192c5db66286b16489caae9bef17ed41, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -621,7 +612,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8538190908439236108, guid: c7df671f511488e419406dc4ec28023d, type: 2}
+  - {fileID: 882574637698120323, guid: 192c5db66286b16489caae9bef17ed41, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -708,7 +699,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8538190908439236108, guid: c7df671f511488e419406dc4ec28023d, type: 2}
+  - {fileID: 882574637698120323, guid: 192c5db66286b16489caae9bef17ed41, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -752,23 +743,23 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c7df671f511488e419406dc4ec28023d, type: 2}
-  m_sharedMaterial: {fileID: 8538190908439236108, guid: c7df671f511488e419406dc4ec28023d,
+  m_fontAsset: {fileID: 11400000, guid: 192c5db66286b16489caae9bef17ed41, type: 2}
+  m_sharedMaterial: {fileID: 882574637698120323, guid: 192c5db66286b16489caae9bef17ed41,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4282137855
-  m_fontColor: {r: 1, g: 0.2358489, b: 0.2358489, a: 1}
-  m_enableVertexGradient: 0
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 1
   m_colorMode: 3
   m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    topLeft: {r: 1, g: 0.8627451, b: 0.078431375, a: 1}
+    topRight: {r: 1, g: 0.8627451, b: 0.078431375, a: 1}
+    bottomLeft: {r: 1, g: 0.078431375, b: 0.078431375, a: 1}
+    bottomRight: {r: 1, g: 0.078431375, b: 0.078431375, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
@@ -778,8 +769,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 5
-  m_fontSizeBase: 5
+  m_fontSize: 15
+  m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

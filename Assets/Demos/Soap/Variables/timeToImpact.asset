@@ -23,4 +23,4 @@ MonoBehaviour:
   _resetOn: 0
   _runtimeValue: 1
   _isClamped: 1
-  _minMax: {x: 0.5, y: 10}
+  _minMax: {x: 0.5, y: 5}

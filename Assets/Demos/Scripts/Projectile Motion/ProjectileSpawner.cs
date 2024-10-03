@@ -75,6 +75,13 @@ public class ProjectileSpawner : MonoBehaviour
     public void SetInitialVelocity(Vector3 initialVelocity)
     {
         this.initialVelocity = initialVelocity;
+
+        spawnPoint.LookAt(initialVelocity);
+    }
+
+    public void SetProjectile(GameObject projectilePrefab)
+    {
+        this.projectilePrefab = projectilePrefab;
     }
 
     /// <summary>

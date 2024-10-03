@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
@@ -41,6 +42,8 @@ public class TrajectoryDrawer : MonoBehaviour
 
     public Vector3 HitPointPosition { get; private set; }
 
+    public List<Vector3> TrajectoryPath { get; private set; } = new();
+
     private void Start()
     {
         // Get the LineRenderer component attached to the same GameObject
@@ -68,6 +71,9 @@ public class TrajectoryDrawer : MonoBehaviour
         // Check if the parameters have changed since the last calculation
         if (CheckParameterChanged(startPosition, initialVelocity, gravity))
         {
+            // Clear trajectory collections
+            ClearTrajectory();
+
             // Cache the current parameters if there is a change
             CacheParameters(startPosition, initialVelocity, gravity);
 
@@ -76,6 +82,7 @@ public class TrajectoryDrawer : MonoBehaviour
 
             // Set the first point of the trajectory at the start position
             lineRenderer.SetPosition(0, startPosition);
+            TrajectoryPath.Add(startPosition);
 
             Vector3 previousPosition = startPosition;  // The starting point for trajectory calculation
 
@@ -96,6 +103,7 @@ public class TrajectoryDrawer : MonoBehaviour
                     // If a collision is detected, stop drawing the trajectory at the collision point
                     lineRenderer.positionCount = i + 1;
                     lineRenderer.SetPosition(i, hit.point);
+                    TrajectoryPath.Add(hit.point);
 
                     // Update the hit point position and rotation to match the collision
                     SetHitPointTransform(hit);
@@ -104,6 +112,7 @@ public class TrajectoryDrawer : MonoBehaviour
 
                 // Set the position of the current point in the LineRenderer
                 lineRenderer.SetPosition(i, currentPosition);
+                TrajectoryPath.Add(currentPosition);
 
                 // Update the previous position to the current one for the next iteration
                 previousPosition = currentPosition;
@@ -118,6 +127,7 @@ public class TrajectoryDrawer : MonoBehaviour
     public void ClearTrajectory()
     {
         lineRenderer.positionCount = 0;
+        TrajectoryPath.Clear();
     }
 
     /// <summary>
