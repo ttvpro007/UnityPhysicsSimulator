@@ -20,10 +20,16 @@ public abstract class Projectile : MonoBehaviour
     protected Rigidbody rBody;
     protected Collider col;
     protected Transform modelTransform;
+    protected TrajectoryDrawer trajectoryDrawer;
 
     public void SetHitPointPosition(Vector3 hitPointPosition)
     {
         this.hitPointPosition = hitPointPosition;
+    }
+
+    public void SetTrajectoryDrawer(TrajectoryDrawer trajectoryDrawer)
+    {
+        this.trajectoryDrawer = trajectoryDrawer;
     }
 
     protected Vector3 hitPointPosition;
@@ -39,6 +45,8 @@ public abstract class Projectile : MonoBehaviour
         col = gameObject.GetComponent<Collider>();
 
         modelTransform = transform.Find("Model");
+
+        trajectoryDrawer = FindAnyObjectByType<TrajectoryDrawer>();
     }
 
     protected virtual void Start()

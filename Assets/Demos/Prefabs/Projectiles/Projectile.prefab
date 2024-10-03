@@ -12,9 +12,8 @@ GameObject:
   - component: {fileID: -3566780372332304051}
   - component: {fileID: -5088972939378200276}
   - component: {fileID: 7168370139915940528}
-  - component: {fileID: -1420486380968861982}
   m_Layer: 0
-  m_Name: Molotov
+  m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -99,35 +98,6 @@ MonoBehaviour:
   randomRotateAtStart: 1
   rotationAxis: 3
   speed: 180
---- !u!114 &-1420486380968861982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5757105989170575550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26de9101977168749999b1a9fe5a0bc1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onHitDamage: 5
-  modifierPercentage: {x: -30, y: 30}
-  hitPointPrefab: {fileID: 4107697869088053130, guid: 0d7e8fc040bcc8942911bc14a194a75c,
-    type: 3}
-  onHitEffect: {fileID: 0}
-  critChance: 30
-  trailEffect: {fileID: 7535860815393195148, guid: ee274b3ea9430394f934d67ebbd72453,
-    type: 3}
-  explosionEffect: {fileID: 6649054028638981966, guid: 17749527f24a38e4a8518725a42d1df3,
-    type: 3}
-  explosionDamage: 10
-  explosionRadius: 15
-  burnEffect: {fileID: 2582430159885675525, guid: bcc074927ac10b2418c810175c149a32,
-    type: 3}
-  burnDamage: 3
-  burnDuration: 5
-  burnInterval: 1
 --- !u!1 &6208710280318810521
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +109,7 @@ GameObject:
   - component: {fileID: 7612120368333283794}
   - component: {fileID: 8510791872171162742}
   - component: {fileID: 7936884731628195195}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,7 +126,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.1, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3578365420252460395}
