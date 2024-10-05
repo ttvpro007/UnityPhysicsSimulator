@@ -18,6 +18,7 @@ public class PredictiveProjectileSpawner : ProjectileSpawner
     [SerializeField] private FloatVariable fixedLaunchSpeed;
 
     [SerializeField] private bool useFixedLaunchSpeed;
+    [SerializeField] private float yOffset;
 
     private Vector3 futureTargetPosition;
 
@@ -40,6 +41,7 @@ public class PredictiveProjectileSpawner : ProjectileSpawner
     {
         // Predict the future position of the target using its velocity and time to impact
         futureTargetPosition = PredictFuturePosition();
+        futureTargetPosition.y += yOffset;
 
         // Calculate the displacement to the future target position
         Vector3 displacement = futureTargetPosition - spawnPoint.position;

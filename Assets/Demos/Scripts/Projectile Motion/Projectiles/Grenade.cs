@@ -1,62 +1,84 @@
-﻿using Obvious.Soap.Example;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
+using Obvious.Soap.Example;
 
-public class Grenade : Projectile
+public class Grenade : Projectile, IExplosive
 {
-    [SerializeField] private GameObject explosionEffect;      // Prefab for the explosion visual effect
-    [SerializeField] private float explosionDamage = 3f;       // Delay before the grenade explodes
-    [SerializeField] private float explosionDelay = 3f;       // Delay before the grenade explodes
-    [SerializeField] private float explosionRadius = 3f;      // Radius of the explosion effect
-    [SerializeField] private float explosionReductionPercentage = .05f;      // Radius of the explosion effect
+    [Tooltip("Prefab for the explosion visual effect.")]
+    [SerializeField] private GameObject explosionEffect;
+
+    [Tooltip("Damage dealt by the explosion.")]
+    [SerializeField] private float explosionDamage = 3f;
+
+    [Tooltip("Radius of the explosion effect.")]
+    [SerializeField] private float explosionRadius = 3f;
+
+    [Tooltip("Delay before the grenade explodes.")]
+    [SerializeField] private float explosionDelay = 3f;
+
+    [Tooltip("Percentage reduction for nearby grenades.")]
+    [SerializeField] private float explosionReductionPercentage = 0.05f;
 
     private float countdown;
     private bool hasExploded = false;
+
+    // Properties from IExplosive
+    public GameObject ExplosionEffect => explosionEffect;
+    public float ExplosionDamage => explosionDamage;
+    public float ExplosionRadius => explosionRadius;
+    public bool HasExploded => hasExploded;
 
     protected override void Start()
     {
         base.Start();
 
-        // Set the countdown timer
         countdown = explosionDelay;
+
+        // Start the coroutine to handle the timed explosion
+        StartCoroutine(StartExplosionCountdown());
     }
 
-    private void Update()
+    private IEnumerator StartExplosionCountdown()
     {
-        // Countdown before explosion
-        countdown -= Time.deltaTime;
-        if (countdown <= 0f && !hasExploded)
+        // Countdown loop before explosion
+        while (countdown > 0f && !hasExploded)
         {
-            Explode();
+            countdown -= Time.deltaTime; // Decrement the countdown manually
+            yield return null; // Wait until the next frame
+        }
+
+        if (!hasExploded)
+        {
+            Explode();  // Trigger explosion
             hasExploded = true;
         }
     }
 
-    private void Explode()
+    public void Explode()
     {
-        // Instantiate explosion effect at grenade's position
+        // Instantiate explosion visual effect
         if (explosionEffect != null)
         {
-            Instantiate(explosionEffect, transform.position, transform.rotation);
+            Instantiate(explosionEffect, transform.position, Quaternion.identity);
         }
 
-        // Find all nearby objects within the explosion radius
+        // Apply explosion damage to nearby objects
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (Collider nearbyObject in colliders)
         {
-            // Apply damage to enemy health scripts
             if (nearbyObject.TryGetComponent<Health>(out var health))
             {
-                DealDamage(health, explosionDamage);
+                health.TakeDamage((int)explosionDamage);
             }
 
-            // Apply time reduction to nearby grenades
+            // Reduce countdown of nearby grenades
             if (nearbyObject.TryGetComponent<Grenade>(out var grenade))
             {
                 grenade.ReduceCountdown(explosionReductionPercentage);
             }
         }
 
-        // Destroy the grenade after its lifetime
+        // Destroy the grenade object
         Destroy();
     }
 
