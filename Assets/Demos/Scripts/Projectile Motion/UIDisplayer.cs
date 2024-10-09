@@ -1,10 +1,9 @@
 using Sirenix.Utilities;
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class TestDisplay : MonoBehaviour
+public class UIDisplayer : MonoBehaviour
 {
     // A list to hold any projectile types (Arrow, Grenade, Molotov, etc.)
     public List<Projectile> Projectiles;
@@ -23,7 +22,7 @@ public class TestDisplay : MonoBehaviour
         // Iterate over each projectile in the list
         foreach (var projectile in Projectiles)
         {
-            UpdateProjectileDisplay(projectile);
+            UpdateProjectileDisplayFields(projectile);
 
             // Store the display fields in the dictionary for easy access
             ProjectileDisplayFields[projectile] = projectile.DisplayFields;
@@ -40,17 +39,17 @@ public class TestDisplay : MonoBehaviour
         }
     }
 
-    private void UpdateProjectileDisplay(Projectile projectile)
+    private void UpdateProjectileDisplayFields(Projectile projectile)
     {
-        if (CastProjectile<Arrow>(projectile, out var arrow))
+        if (ReflectionHelper.CastProjectile<Arrow>(projectile, out var arrow))
         {
             projectile.UpdateDisplayFieldsInfo(arrow);
         }
-        else if (CastProjectile<Grenade>(projectile, out var grenade))
+        else if (ReflectionHelper.CastProjectile<Grenade>(projectile, out var grenade))
         {
             projectile.UpdateDisplayFieldsInfo(grenade);
         }
-        else if (CastProjectile<Molotov>(projectile, out var molotov))
+        else if (ReflectionHelper.CastProjectile<Molotov>(projectile, out var molotov))
         {
             projectile.UpdateDisplayFieldsInfo(molotov);
         }
@@ -58,15 +57,15 @@ public class TestDisplay : MonoBehaviour
 
     public void UpdateDisplayForProjectile(Projectile projectile)
     {
-        if (CastProjectile<Arrow>(projectile, out var arrow))
+        if (ReflectionHelper.CastProjectile<Arrow>(projectile, out var arrow))
         {
             SetDisplay(arrow);
         }
-        else if (CastProjectile<Grenade>(projectile, out var grenade))
+        else if (ReflectionHelper.CastProjectile<Grenade>(projectile, out var grenade))
         {
             SetDisplay(grenade);
         }
-        else if (CastProjectile<Molotov>(projectile, out var molotov))
+        else if (ReflectionHelper.CastProjectile<Molotov>(projectile, out var molotov))
         {
             SetDisplay(molotov);
         }
@@ -88,12 +87,6 @@ public class TestDisplay : MonoBehaviour
             statRow.ValueField.text = displayableField.Value;
             StatRows.Add(statRow.gameObject);
         }
-    }
-
-    private bool CastProjectile<T>(Projectile projectile, out T result) where T : Projectile
-    {
-        result = projectile as T;
-        return result != null;
     }
 
     private void TurnOffAllUIGameObject()

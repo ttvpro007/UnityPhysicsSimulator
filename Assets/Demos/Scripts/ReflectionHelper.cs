@@ -26,4 +26,11 @@ public static class ReflectionHelper
         // Return error message if field not found
         return "Field not found";
     }
+
+
+    public static bool CastProjectile<T>(Projectile projectile, out T result) where T : Projectile
+    {
+        result = projectile as T;
+        return result != null;
+    }
 }

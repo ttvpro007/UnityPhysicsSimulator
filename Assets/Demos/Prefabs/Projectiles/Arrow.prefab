@@ -232,6 +232,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiGameObject: {fileID: 6415607788586168496, guid: 234c0234fa1ddda4995fe91ea8dcdf58,
     type: 3}
+  gameplayGameObject: {fileID: 4335040415130879653, guid: da61d7174e7993a4fa113e8cc6792158,
+    type: 3}
   description: A ranged weapon launching arrows with precision and speed.
   displayFields:
   - Icon: {fileID: 21300000, guid: 06d40cd9906418d429878fbe00a54d28, type: 3}

@@ -7,10 +7,12 @@ using UnityEngine;
 public abstract class Projectile : MonoBehaviour, IDisplayable
 {
     [SerializeField] private GameObject uiGameObject;
+    [SerializeField] private GameObject gameplayGameObject;
     [SerializeField] private string description;
     [SerializeField] private List<IDisplayable.Displayable> displayFields;
 
     public GameObject UIGameObject => uiGameObject;
+    public GameObject GameplayGameObject => gameplayGameObject;
     public string Description => description;
     public List<IDisplayable.Displayable> DisplayFields => displayFields;
 
@@ -186,6 +188,7 @@ public interface IDisplayable
     }
 
     GameObject UIGameObject { get; }
+    GameObject GameplayGameObject { get; }
     string Description { get; }
     List<Displayable> DisplayFields { get; }
 }
