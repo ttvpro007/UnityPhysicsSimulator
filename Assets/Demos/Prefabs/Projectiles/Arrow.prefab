@@ -230,10 +230,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3cf7d71608925f9438a49f08b98ed2ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiGameObject: {fileID: 6415607788586168496, guid: 234c0234fa1ddda4995fe91ea8dcdf58,
+    type: 3}
+  description: A ranged weapon launching arrows with precision and speed.
+  displayFields:
+  - Icon: {fileID: 21300000, guid: 06d40cd9906418d429878fbe00a54d28, type: 3}
+    Field: onHitDamage
+    Value: 15
+  - Icon: {fileID: 21300000, guid: 24970a3b5da054144a7d58e4073fb852, type: 3}
+    Field: critChance
+    Value: 0.7
+  - Icon: {fileID: 21300000, guid: 8db282d9bf2032c46a882914e7640797, type: 3}
+    Field: destroyDelay
+    Value: 3
   onHitDamage: 15
   modifierPercentage: {x: -0.3, y: 0.3}
   hitPointPrefab: {fileID: 4107697869088053130, guid: 0d7e8fc040bcc8942911bc14a194a75c,
     type: 3}
   onHitEffect: {fileID: 0}
-  critChance: 0
+  critChance: 0.7
   destroyDelay: 3

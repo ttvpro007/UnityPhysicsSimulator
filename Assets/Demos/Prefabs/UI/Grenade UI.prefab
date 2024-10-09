@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cff6ba17a101939428e4796083f0a9a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  randomRotateAtStart: 0
   rotationAxis: 1
   speed: 20
 --- !u!1 &8330412539481436073
@@ -75,7 +76,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.86602545, y: 0, z: 0, w: 0.49999994}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1600, y: 1600, z: 1600}
+  m_LocalScale: {x: 2500, y: 2500, z: 2500}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 92787585942474158}

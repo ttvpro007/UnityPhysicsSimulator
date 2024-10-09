@@ -183,18 +183,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26de9101977168749999b1a9fe5a0bc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiGameObject: {fileID: 8575328533598524023, guid: a1308c09f7d62894dab66c213748416a,
+    type: 3}
+  description: A thrown incendiary weapon, igniting targets with burning liquid.
+  displayFields:
+  - Icon: {fileID: 21300000, guid: 06d40cd9906418d429878fbe00a54d28, type: 3}
+    Field: onHitDamage
+    Value: 5
+  - Icon: {fileID: 21300000, guid: 24970a3b5da054144a7d58e4073fb852, type: 3}
+    Field: critChance
+    Value: 0.3
+  - Icon: {fileID: 21300000, guid: d2fd603233807c64e9496b3605d70307, type: 3}
+    Field: explosionDamage
+    Value: 10
+  - Icon: {fileID: 21300000, guid: 08897925ff0cd804d9322853c6c329ef, type: 3}
+    Field: explosionRadius
+    Value: 15
+  - Icon: {fileID: 21300000, guid: 2af7955f20753bd4e903ec59dd4c2a41, type: 3}
+    Field: burnDamage
+    Value: 3
+  - Icon: {fileID: 21300000, guid: 8db282d9bf2032c46a882914e7640797, type: 3}
+    Field: burnDuration
+    Value: 5
+  - Icon: {fileID: 21300000, guid: d8468da31d3761c4daf730498ba44ab6, type: 3}
+    Field: burnInterval
+    Value: 1
   onHitDamage: 5
   modifierPercentage: {x: -0.3, y: 0.3}
   hitPointPrefab: {fileID: 4107697869088053130, guid: 0d7e8fc040bcc8942911bc14a194a75c,
     type: 3}
   onHitEffect: {fileID: 0}
   critChance: 0.3
-  trailEffect: {fileID: 7535860815393195148, guid: ee274b3ea9430394f934d67ebbd72453,
-    type: 3}
   explosionEffect: {fileID: 6649054028638981966, guid: 17749527f24a38e4a8518725a42d1df3,
     type: 3}
   explosionDamage: 10
   explosionRadius: 15
+  trailEffect: {fileID: 7535860815393195148, guid: ee274b3ea9430394f934d67ebbd72453,
+    type: 3}
   burnEffect: {fileID: 2582430159885675525, guid: bcc074927ac10b2418c810175c149a32,
     type: 3}
   burnDamage: 3

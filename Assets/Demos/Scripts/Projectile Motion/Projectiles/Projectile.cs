@@ -1,10 +1,19 @@
 using Obvious.Soap.Example;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public abstract class Projectile : MonoBehaviour
+public abstract class Projectile : MonoBehaviour, IDisplayable
 {
+    [SerializeField] private GameObject uiGameObject;
+    [SerializeField] private string description;
+    [SerializeField] private List<IDisplayable.Displayable> displayFields;
+
+    public GameObject UIGameObject => uiGameObject;
+    public string Description => description;
+    public List<IDisplayable.Displayable> DisplayFields => displayFields;
+
     // Serialized Fields
     [Tooltip("The amount of damage this projectile deals upon impact.")]
     [SerializeField] protected int onHitDamage;
@@ -21,7 +30,7 @@ public abstract class Projectile : MonoBehaviour
 
     [Tooltip("Critical hit chance represented as a value between 0 and 1.")]
     [Range(0f, 1f)]
-    [SerializeField] private float critChance;
+    [SerializeField] protected float critChance;
 
     // Protected Fields
     protected Rigidbody rBody;
@@ -146,6 +155,14 @@ public abstract class Projectile : MonoBehaviour
             modelTransform.gameObject.SetActive(active);
         }
     }
+
+    public virtual void UpdateDisplayFieldsInfo<T>(T projectile) where T : Projectile
+    {
+        foreach (var displayable in displayFields)
+        {
+            displayable.Value = ReflectionHelper.GetPrivateFieldValue(projectile, displayable.Field);
+        }
+    }
 }
 
 public interface IExplosive
@@ -156,4 +173,19 @@ public interface IExplosive
     bool HasExploded { get; }
 
     void Explode();
+}
+
+public interface IDisplayable
+{
+    [System.Serializable]
+    public class Displayable
+    {
+        public Sprite Icon;
+        public string Field;
+        public string Value;
+    }
+
+    GameObject UIGameObject { get; }
+    string Description { get; }
+    List<Displayable> DisplayFields { get; }
 }
