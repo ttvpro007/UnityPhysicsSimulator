@@ -55,9 +55,9 @@ public class Arrow : Projectile
         }
 
         // Rotate the arrow to align with the direction of its velocity
-        if (rBody.velocity != Vector3.zero)
+        if (rBody.linearVelocity != Vector3.zero)
         {
-            transform.rotation = Quaternion.LookRotation(rBody.velocity);
+            transform.rotation = Quaternion.LookRotation(rBody.linearVelocity);
         }
 
         // Get the next point in the path
