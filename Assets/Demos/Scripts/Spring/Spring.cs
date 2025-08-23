@@ -1,64 +1,212 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Spring : MonoBehaviour
 {
-    [Header("Detection")]
+    public enum AnchorMode { None, StickyHit, Transform, WorldPoint }
+
+    [Header("Detection (for None/StickyHit)")]
     public LayerMask surface = ~0;
-    public float rayExtraLength = 0.2f;
+    public float rayExtraLength = 0.2f;               // extra reach beyond rest length
 
     [Header("Spring")]
-    public float trueLength = 1.0f;                             // L0
-    [Range(0f, 4500f)] public float springConstant = 2000f;     // k (N/m)
-    [Range(0f, 50f)] public float dampingModifier = 50f;        // c (N·s/m)
-    public bool restrained = false;
+    [Min(0f)] public float trueLength = 1.0f;         // L0
+    [Range(0f, 10000f), LabelText("Spring Constant (k)")] public float springConstant = 2000f; // N/m
+    [Range(0f, 50f), LabelText("Damping (c)")] public float dampingModifier = 50f;            // N·s/m
+    [Tooltip("Ignore pulling. Useful for suspension-like behavior.")] public bool onlyCompression = false;
 
-    [Header("When no hit")]
-    public bool clampWhenNoHitToPull = true;                    // keep a small negative x to “pull” back
+    [Header("Anchoring")]
+    public AnchorMode anchorMode = AnchorMode.None;
+    [ShowIf("@anchorMode == AnchorMode.Transform")] public Transform anchorTransform;
+    [ShowIf("@anchorMode == AnchorMode.Transform")] public Vector3 anchorLocalOffset;
+    [ShowIf("@anchorMode == AnchorMode.WorldPoint")] public Vector3 worldAnchorPoint;  // set in inspector / code
+    [ShowIf("@anchorMode == AnchorMode.StickyHit")] public float loseStickyIfFartherThan = 0.5f; // meters beyond cast
+
+    [Header("Apply")]
+    public bool restrained = false;
+    [Tooltip("Apply forces at contact points (gives correct torques). If false, uses center of mass.")]
+    public bool applyAtPositions = true;
 
     [Header("Debug (read-only)")]
-    public float displacement;                                  // x
-    public float beginOfFrameDisplacement;
-    public float deltaDisplacement;                             // x_t - x_{t-Δt} (not used in force anymore)
-    public float currentLength;                                 // L (distance to surface along -transform.up)
-    public float compressionVelocity;                           // xDot used this step
-    public float lastScalar;
-    public float maxCast;                                       // max ray length
+    [ReadOnly] public float currentLength;            // |A - B|
+    [ReadOnly] public float displacement;             // x = L0 - L (compress>0, stretch<0)
+    [ReadOnly] public float compressionVelocity;      // xDot (relative along spring line)
+    [ReadOnly] public float lastScalar;               // kx - c xDot
+    [ReadOnly] public Vector3 lastAnchorWorld;        // resolved anchor for this step
+    [ReadOnly] public float maxCast;
+    [ReadOnly] public Rigidbody rb;
 
-    Rigidbody rb;
+    public event System.Action<SpringSnapshot> OnStepped; // for logging & visualization
 
-    void Awake() => rb = GetComponent<Rigidbody>();
+    Rigidbody _anchorRb;
+    bool _hasSticky;
+    Vector3 _stickyPoint;
 
-    void FixedUpdate() => ApplySpring();
+    void Start()
+    {
+        WarnIfTooStiff();
+        CacheAnchorRb();
 
-    private void ApplySpring()
+        OnStepped?.Invoke(new SpringSnapshot(this));
+    }
+
+    void OnEnable()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+    void OnValidate()
+    {
+        if (!rb) rb = GetComponent<Rigidbody>();
+        CacheAnchorRb();
+        WarnIfTooStiff();
+    }
+
+    void FixedUpdate()
     {
         if (!rb) return;
 
         rb.isKinematic = restrained;
         if (restrained) return;
 
-        Ray ray = new(transform.position, -transform.up);
+        // 1) Resolve anchor point for this step
+        Vector3 attach = transform.position; // attach point (could be an offset on your body)
+        Vector3 anchor = ResolveAnchor(attach, out bool haveAnchor);
 
-        // If no hit, keep a small negative x so it “pulls” back instead of popping upward
-        maxCast = trueLength + rayExtraLength;
-        if (Physics.Raycast(ray, out var hit, maxCast, surface, QueryTriggerInteraction.Ignore))
-            currentLength = hit.distance;
+        if (!haveAnchor)
+            return; // in 'None' mode with no hit: no spring force at all
+
+        lastAnchorWorld = anchor;
+
+        // 2) Spring geometry along the line between points
+        Vector3 dir = attach - anchor;
+        float L = dir.magnitude;
+        if (L < 1e-6f) return;
+        Vector3 n = dir / L; // from anchor -> attach
+
+        currentLength = L;
+        displacement = trueLength - L; // + compress, - stretch
+
+        if (onlyCompression && displacement <= 0f) return;
+
+        // 3) Relative velocity along spring line
+        Vector3 vAttach = rb.GetPointVelocity(attach);
+        Vector3 vAnchor = Vector3.zero;
+        if (_anchorRb) vAnchor = _anchorRb.GetPointVelocity(anchor);
+
+        compressionVelocity = Vector3.Dot(vAttach - vAnchor, n);
+
+        // 4) Spring-damper force
+        float f = springConstant * displacement - dampingModifier * compressionVelocity;
+        lastScalar = f;
+
+        Vector3 force = f * n;
+
+        if (applyAtPositions)
+        {
+            rb.AddForceAtPosition(force, attach, ForceMode.Force);
+            if (_anchorRb) _anchorRb.AddForceAtPosition(-force, anchor, ForceMode.Force);
+        }
         else
-            currentLength = clampWhenNoHitToPull ? maxCast : trueLength;
+        {
+            rb.AddForce(force, ForceMode.Force);
+            if (_anchorRb) _anchorRb.AddForce(-force, ForceMode.Force);
+        }
 
-        // Compression (can be +/-). Positive => push; negative => pull.
-        beginOfFrameDisplacement = displacement;
-        displacement = trueLength - currentLength;
-        deltaDisplacement = displacement - beginOfFrameDisplacement;
+        OnStepped?.Invoke(new SpringSnapshot(this));
+    }
 
-        // >>> KEY FIX: use axis velocity for xDot, not discrete dx/dt <<<
-        compressionVelocity = Vector3.Dot(rb.linearVelocity, transform.up);
-        lastScalar = springConstant * displacement - dampingModifier * compressionVelocity; // F = kx - c xDot
+    // ----------------- Anchor resolution -----------------
+    Vector3 ResolveAnchor(Vector3 attach, out bool haveAnchor)
+    {
+        haveAnchor = false;
 
-        rb.AddForce(lastScalar * transform.up, ForceMode.Force);
+        switch (anchorMode)
+        {
+            case AnchorMode.Transform:
+                {
+                    if (!anchorTransform) return default;
+                    haveAnchor = true;
+                    return anchorTransform.TransformPoint(anchorLocalOffset);
+                }
 
-        //// Debug
-        //Debug.DrawRay(transform.position, -transform.up * Mathf.Min(currentLength, maxCast), Color.red);
-        //Debug.DrawRay(transform.position, transform.up * Mathf.Clamp(displacement, -trueLength, trueLength), displacement >= 0 ? Color.yellow : Color.cyan);
+            case AnchorMode.WorldPoint:
+                {
+                    haveAnchor = true;
+                    return worldAnchorPoint;
+                }
+
+            case AnchorMode.StickyHit:
+            case AnchorMode.None:
+                {
+                    // Use a down-ray along -transform.up to find ground contact
+                    maxCast = trueLength + rayExtraLength;
+                    Ray ray = new Ray(transform.position, -transform.up);
+                    if (Physics.Raycast(ray, out var hit, maxCast, surface, QueryTriggerInteraction.Ignore))
+                    {
+                        _stickyPoint = hit.point;
+                        _hasSticky = true;
+                        haveAnchor = true;
+                        return _stickyPoint;
+                    }
+
+                    if (anchorMode == AnchorMode.StickyHit && _hasSticky)
+                    {
+                        // Keep last sticky point unless we've drifted too far away
+                        float beyond = (attach - _stickyPoint).magnitude - maxCast;
+                        if (beyond <= loseStickyIfFartherThan)
+                        {
+                            haveAnchor = true;
+                            return _stickyPoint;
+                        }
+                        else
+                        {
+                            _hasSticky = false; // drop anchor
+                        }
+                    }
+
+                    // 'None' mode: no contact -> no anchor -> no force
+                    return default;
+                }
+        }
+
+        return default;
+    }
+
+    void CacheAnchorRb()
+    {
+        _anchorRb = null;
+        if (anchorTransform) anchorTransform.TryGetComponent(out _anchorRb);
+    }
+
+    // --------------- Stability heuristic ---------------
+    void WarnIfTooStiff()
+    {
+        float mEff = rb ? rb.mass : 1f;
+        if (_anchorRb) mEff = 1f / (1f / Mathf.Max(1e-6f, rb.mass) + 1f / Mathf.Max(1e-6f, _anchorRb.mass)); // reduced mass
+
+        float kMax = mEff * Mathf.Pow(2f * Mathf.PI / (8f * Time.fixedDeltaTime), 2f);
+        if (springConstant > kMax)
+        {
+            Debug.LogWarning(
+                $"[AnchoredSpring] k={springConstant:F0} > kMax≈{kMax:F0} (m_eff={mEff:F2}, dt={Time.fixedDeltaTime}). " +
+                $"Consider lowering k, raising mass, or increasing solver substeps.");
+        }
+    }
+}
+
+public struct SpringSnapshot
+{
+    public readonly float displacement, currentLength, compressionVelocity, forceScalar;
+    public readonly Vector3 anchorWorld, attachWorld;
+    public SpringSnapshot(Spring s)
+    {
+        displacement = s.displacement;
+        currentLength = s.currentLength;
+        compressionVelocity = s.compressionVelocity;
+        forceScalar = s.lastScalar;
+        anchorWorld = s.lastAnchorWorld;
+        attachWorld = s.transform.position;
     }
 }
