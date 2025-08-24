@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Sirenix.OdinInspector;
 
 [DisallowMultipleComponent]
 public class SpringHUD : MonoBehaviour
@@ -16,9 +17,9 @@ public class SpringHUD : MonoBehaviour
     public TMP_Text velText;
 
     [Header("Sliders")]
-    public Slider kSlider;   // springConstant
-    public Slider cSlider;   // dampingModifier
-    public Slider l0Slider;  // trueLength
+    [LabelText("K Slider")] public Slider kSlider;   // springConstant
+    [LabelText("C Slider")] public Slider cSlider;   // dampingModifier
+    [LabelText("L0 Slider")] public Slider l0Slider;  // trueLength
 
     [Header("Toggles (Visualizer)")]
     public Toggle anchorLineT;
@@ -54,9 +55,9 @@ public class SpringHUD : MonoBehaviour
         float zeta = (spring.dampingModifier) / (2f * Mathf.Sqrt(Mathf.Max(1e-6f, spring.springConstant) * m));
 
         // Update labels
-        if (dispText) dispText.text = $"x: {x.ToString(F3)} m   ẋ: {xDt.ToString(F3)} m/s   ζ: {zeta.ToString(F2)}";
+        if (dispText) dispText.text = $"x: {x.ToString(F3)} m   xDt: {xDt.ToString(F3)} m/s   zeta: {zeta.ToString(F2)}";
         if (forceText) forceText.text = $"F: {F.ToString(F1)} N";
-        if (lenText) lenText.text = $"L: {L.ToString(F3)} m   L₀: {spring.trueLength.ToString(F3)} m";
+        if (lenText) lenText.text = $"L: {L.ToString(F3)} m   L0: {spring.trueLength.ToString(F3)} m";
         if (velText) velText.text = $"v: ({v.x.ToString(F2)}, {v.y.ToString(F2)}, {v.z.ToString(F2)}) m/s";
     }
 
@@ -75,13 +76,13 @@ public class SpringHUD : MonoBehaviour
         }
         if (cSlider)
         {
-            cSlider.minValue = 0f; cSlider.maxValue = 100f;
+            cSlider.minValue = 0f; cSlider.maxValue = 50f;
             cSlider.SetValueWithoutNotify(spring.dampingModifier);
             cSlider.onValueChanged.AddListener(v => spring.dampingModifier = v);
         }
         if (l0Slider)
         {
-            l0Slider.minValue = 0f; l0Slider.maxValue = 5f;
+            l0Slider.minValue = 0f; l0Slider.maxValue = 20f;
             l0Slider.SetValueWithoutNotify(spring.trueLength);
             l0Slider.onValueChanged.AddListener(v => spring.trueLength = v);
         }
