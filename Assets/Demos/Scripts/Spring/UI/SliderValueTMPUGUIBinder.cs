@@ -22,8 +22,10 @@ public class SliderValueTMPUGUIBinder : MonoBehaviour
         UnregisterEvents();
     }
 
+    [OnValidateCall]
     private void GetComponentRefs()
     {
+        print("On Validate Call");
         slider ??= transform.GetComponentInSiblings<Slider>();
         text ??= GetComponent<TextMeshProUGUI>();
     }
@@ -59,12 +61,12 @@ public class SliderValueTMPUGUIBinder : MonoBehaviour
         }
     }
 
-#if UNITY_EDITOR
-    private void OnValidate()
-    {
-        GetComponentRefs();
-    }
-#endif
+//#if UNITY_EDITOR
+//    private void OnValidate()
+//    {
+//        GetComponentRefs();
+//    }
+//#endif
 }
 
 public static class TransformExtensions

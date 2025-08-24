@@ -1,23 +1,23 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class Interactible : MonoBehaviour, IInteractible
+public abstract class Selectable : MonoBehaviour, ISelectable
 {
     [Header("Visuals")]
     public Renderer targetRenderer;                 // If null, auto-find
-    public Color normalColor = new Color(0.85f, 0.85f, 0.85f, 1f);
-    public Color hoverColor = new Color(1f, 0.9f, 0.3f, 1f);
-    public Color activeColor = new Color(0.3f, 1f, 1f, 1f);
+    public Color normalColor = new(0.85f, 0.85f, 0.85f, 1f);
+    public Color hoverColor = new(1f, 0.9f, 0.3f, 1f);
+    public Color activeColor = new(0.3f, 1f, 1f, 1f);
     [Range(1f, 2f)] public float hoverScale = 1f;
     [Range(1f, 3f)] public float activeScale = 1f;
 
-    IInteractibleHandler _gizmo;
+    ISelectableHandler _handler;
     Vector3 _initialScale;
     MaterialPropertyBlock _mpb;
 
     void Awake()
     {
-        _gizmo = GetComponentInParent<IInteractibleHandler>();
+        _handler = GetComponentInParent<ISelectableHandler>();
         if (!targetRenderer) targetRenderer = GetComponentInChildren<Renderer>();
         _initialScale = transform.localScale;
         _mpb = new MaterialPropertyBlock();
@@ -46,40 +46,31 @@ public abstract class Interactible : MonoBehaviour, IInteractible
         transform.localScale = _initialScale * scaleMul;
     }
 
-    // --- EventSystem interfaces ---
-
-    public void OnPointerEnter(PointerEventData eventData)
+    protected T CastHandler<T>() where T : ISelectableHandler
     {
-        _gizmo?.OnHandlePointerEnter(this, eventData);
-    }
+        if (_handler == null)
+            return default;
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        _gizmo?.OnHandlePointerExit(this, eventData);
+        return (T)_handler;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        _gizmo?.OnHandlePointerDown(this, eventData);
+        _handler?.HandlePointerDown(this, eventData);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        _handler?.HandlePointerEnter(this, eventData);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        _handler?.HandlePointerExit(this, eventData);
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        _gizmo?.OnHandlePointerUp(this, eventData);
-    }
-
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        _gizmo?.OnHandleBeginDrag(this, eventData);
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        _gizmo?.OnHandleDrag(this, eventData);
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        _gizmo?.OnHandleEndDrag(this, eventData);
+        _handler?.HandlePointerUp(this, eventData);
     }
 }

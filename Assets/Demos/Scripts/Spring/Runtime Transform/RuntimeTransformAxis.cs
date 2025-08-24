@@ -5,7 +5,7 @@ public enum Axis { None, X, Y, Z }
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Collider))]
-public class RuntimeTransformAxis : Interactible, IInteractible
+public class RuntimeTransformAxis : Draggable, IDraggable
 {
     [Header("Axis")]
     public Axis axis = Axis.X;

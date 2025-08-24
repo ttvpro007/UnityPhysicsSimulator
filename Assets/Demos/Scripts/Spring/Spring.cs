@@ -1,5 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Spring : MonoBehaviour
@@ -29,15 +30,18 @@ public class Spring : MonoBehaviour
     public bool applyAtPositions = true;
 
     [Header("Debug (read-only)")]
-    [ReadOnly] public float currentLength;            // |A - B|
-    [ReadOnly] public float displacement;             // x = L0 - L (compress>0, stretch<0)
-    [ReadOnly] public float compressionVelocity;      // xDot (relative along spring line)
-    [ReadOnly] public float lastScalar;               // kx - c xDot
-    [ReadOnly] public Vector3 lastAnchorWorld;        // resolved anchor for this step
+    [ReadOnly] public float currentLength;          // |A - B|
+    [ReadOnly] public float displacement;           // x = L0 - L (compress>0, stretch<0)
+    [ReadOnly] public float compressionVelocity;    // xDot (relative along spring line)
+    [ReadOnly] public float lastScalar;             // kx - c xDot
+    [ReadOnly] public Vector3 lastAnchorWorld;      // resolved anchor for this step
     [ReadOnly] public float maxCast;
     [ReadOnly] public Rigidbody rb;
+    [ReadOnly] public float mass;                   // cached rb.mass
+    [ReadOnly] public float zeta;                   // cached rb.mass
 
     public event System.Action<SpringSnapshot> OnStepped; // for logging & visualization
+    public event System.Action OnSpringParamsChanged; // for HUD
 
     Rigidbody _anchorRb;
     bool _hasSticky;
@@ -49,11 +53,20 @@ public class Spring : MonoBehaviour
         CacheAnchorRb();
 
         OnStepped?.Invoke(new SpringSnapshot(this));
+        OnSpringParamsChanged?.Invoke();
     }
 
     void OnEnable()
     {
         rb = GetComponent<Rigidbody>();
+
+        OnSpringParamsChanged -= CalculateSpringParams;
+        OnSpringParamsChanged += CalculateSpringParams;
+    }
+
+    void OnDisable()
+    {
+        OnSpringParamsChanged -= CalculateSpringParams;
     }
 
     void OnValidate()
@@ -115,6 +128,35 @@ public class Spring : MonoBehaviour
         }
 
         OnStepped?.Invoke(new SpringSnapshot(this));
+    }
+
+    // --------------- Parameter change notification ---------------
+    public void SetSpringConstant(float k)
+    {
+        springConstant = Mathf.Max(0f, k);
+        WarnIfTooStiff();
+        OnSpringParamsChanged?.Invoke();
+        OnStepped?.Invoke(new SpringSnapshot(this));
+    }
+
+    public void SetDampingModifier(float d)
+    {
+        dampingModifier = Mathf.Max(0f, d);
+        WarnIfTooStiff();
+        OnSpringParamsChanged?.Invoke();
+        OnStepped?.Invoke(new SpringSnapshot(this));
+    }
+
+    public void SetTrueLength(float l)
+    {
+        trueLength = Mathf.Max(0f, l);
+        OnSpringParamsChanged?.Invoke();
+    }
+
+    private void CalculateSpringParams()
+    {
+        mass = rb ? Mathf.Max(1e-6f, rb.mass) : 1f;
+        zeta = (dampingModifier) / (2f * Mathf.Sqrt(Mathf.Max(1e-6f, springConstant) * mass));
     }
 
     // ----------------- Anchor resolution -----------------
@@ -199,13 +241,15 @@ public class Spring : MonoBehaviour
 public struct SpringSnapshot
 {
     public readonly float displacement, currentLength, compressionVelocity, forceScalar;
-    public readonly Vector3 anchorWorld, attachWorld;
+    public readonly Vector3 rbPointVelocity, anchorWorld, attachWorld;
     public SpringSnapshot(Spring s)
     {
         displacement = s.displacement;
         currentLength = s.currentLength;
         compressionVelocity = s.compressionVelocity;
         forceScalar = s.lastScalar;
+
+        rbPointVelocity = s.rb ? s.rb.GetPointVelocity(s.transform.position) : Vector3.zero;
         anchorWorld = s.lastAnchorWorld;
         attachWorld = s.transform.position;
     }
