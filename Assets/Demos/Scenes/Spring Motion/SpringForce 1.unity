@@ -1827,6 +1827,24 @@ MonoBehaviour:
   hovered: {fileID: 0}
   active: {fileID: 0}
   isDragging: 0
+  allowedAxes: 3
+  xLimit:
+    useLimit: 0
+    min: 0
+    max: 0
+    snap: 0
+  yLimit:
+    useLimit: 0
+    min: 0
+    max: 0
+    snap: 0
+  zLimit:
+    useLimit: 0
+    min: 0
+    max: 0
+    snap: 0
+  holdShiftDisablesSnap: 1
+  holdCtrlBypassesLocks: 1
 --- !u!1 &407351059
 GameObject:
   m_ObjectHideFlags: 0
