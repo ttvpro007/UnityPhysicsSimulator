@@ -1,42 +1,64 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 [DefaultExecutionOrder(10000)]
 public class RuntimeTransform : MonoBehaviour, IDraggableHandler
 {
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Constants
+    // ─────────────────────────────────────────────────────────────────────────────
+    const float kParallelEpsilon = 1e-6f;
+    const int kNoPointerId = -999;
+
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Config
+    // ─────────────────────────────────────────────────────────────────────────────
     [Header("Setup")]
     public Camera sceneCamera;
 
     [Header("Behavior")]
-    public bool useLocalSpace = false;   // world- or local-aligned axes
+    [Tooltip("World- or local-aligned axes")]
+    public bool useLocalSpace = false;
+
     public bool autoSize = true;
     [Range(0.01f, 1f)] public float sizeFactor = 0.15f;
+    [Tooltip("Global position snapping step (overridden per-axis if set)")]
     public float snapStep = 0f;
 
+    // ─────────────────────────────────────────────────────────────────────────────
+    // State (read-only intent)
+    // ─────────────────────────────────────────────────────────────────────────────
     [Header("State (read-only)")]
     public Transform target;
     public RuntimeTransformAxis hovered;
     public RuntimeTransformAxis active;
     public bool isDragging;
 
+    // Private runtime
     RuntimeTransformAxis[] _handles;
     Vector3 _dragAxisWorld;
     Vector3 _targetStartPos;
     Vector3 _dragPlaneOrigin;
     Plane _dragPlane;
-    int _activePointerId = -999;
+    int _activePointerId = kNoPointerId;
 
-    // ---------- AXIS CONSTRAINTS >>>
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Axis Constraints (types + config)
+    // ─────────────────────────────────────────────────────────────────────────────
     [Flags] public enum AxisMask { None = 0, X = 1, Y = 2, Z = 4, All = X | Y | Z }
 
     [Serializable]
     public struct AxisLimit
     {
-        public bool useLimit;                 // if true, clamp delta between [min,max]
-        public float min;                     // negative = backward along the axis
-        public float max;                     // positive = forward along the axis
-        [Min(0f)] public float snap;          // 0 = use global snapStep
+        [Tooltip("If true, clamp delta between [min,max] relative to drag start.")]
+        public bool useLimit;
+        [Tooltip("Negative = backward along the axis from the drag start.")]
+        public float min;
+        [Tooltip("Positive = forward along the axis from the drag start.")]
+        public float max;
+        [Min(0f), Tooltip("Per-axis snap. 0 = use global snapStep.")]
+        public float snap;
     }
 
     [Header("Axis Constraints")]
@@ -45,20 +67,22 @@ public class RuntimeTransform : MonoBehaviour, IDraggableHandler
     public AxisLimit yLimit;
     public AxisLimit zLimit;
 
-    [Tooltip("Optional world-space box that the target's position must remain inside.")]
+    [Tooltip("Optional world-space box the target's position must remain inside. Not serialized when null.")]
     public Bounds? worldBounds = null;
 
     [Header("Constraint Modifiers")]
     public bool holdShiftDisablesSnap = true;
     public bool holdCtrlBypassesLocks = true;
-    // <<< AXIS CONSTRAINTS ----------
 
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Unity Messages
+    // ─────────────────────────────────────────────────────────────────────────────
     void Awake()
     {
         if (!sceneCamera) sceneCamera = Camera.main;
         _handles = GetComponentsInChildren<RuntimeTransformAxis>(includeInactive: true);
         SetAllStates(HandleState.Normal);
-        ApplyHandleVisibilityByLocks();            // <<< add
+        ApplyHandleVisibilityByLocks();
         gameObject.SetActive(false);
     }
 
@@ -78,9 +102,30 @@ public class RuntimeTransform : MonoBehaviour, IDraggableHandler
         }
     }
 
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Public Control API
+    // ─────────────────────────────────────────────────────────────────────────────
+    public void Attach(Transform newTarget)
+    {
+        target = newTarget;
+        if (target)
+        {
+            transform.position = target.position;
+            transform.rotation = useLocalSpace ? target.rotation : Quaternion.identity;
+            gameObject.SetActive(true);
+        }
+        else Detach();
+    }
 
+    public void Detach()
+    {
+        target = null;
+        isDragging = false;
+        hovered = active = null;
+        gameObject.SetActive(false);
+    }
 
-    // ---------- Public API for constraints >>>
+    // Axis-constraint API
     public void SetAxisAllowed(Axis a, bool allowed)
     {
         AxisMask bit = a switch { Axis.X => AxisMask.X, Axis.Y => AxisMask.Y, Axis.Z => AxisMask.Z, _ => AxisMask.None };
@@ -119,47 +164,26 @@ public class RuntimeTransform : MonoBehaviour, IDraggableHandler
 
     public void SetWorldBounds(Bounds? bounds) => worldBounds = bounds;
 
-    // ---------- Public control ----------
-    public void Attach(Transform newTarget)
-    {
-        target = newTarget;
-        if (target)
-        {
-            transform.position = target.position;
-            transform.rotation = useLocalSpace ? target.rotation : Quaternion.identity;
-            gameObject.SetActive(true);
-        }
-        else Detach();
-    }
-
-    public void Detach()
-    {
-        target = null;
-        isDragging = false;
-        hovered = active = null;
-        gameObject.SetActive(false);
-    }
-
-    // ---------- Handle event entry points (called by RuntimeTransformAxis) ----------
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Event Entry Points (called by RuntimeTransformAxis)
+    // ─────────────────────────────────────────────────────────────────────────────
     public void HandlePointerEnter(ISelectable selectable, PointerEventData eventData)
     {
-        if (selectable is not RuntimeTransformAxis rta) return; // ignore if not runtime transform axis
-
-        if (!target || isDragging) return; // ignore hover while dragging
+        if (selectable is not RuntimeTransformAxis rta) return;
+        if (!target || isDragging) return;
 
         if (hovered != rta)
         {
             SetAllStates(HandleState.Normal);
             rta.SetState(HandleState.Hover);
-            hovered = (RuntimeTransformAxis) selectable;
+            hovered = rta;
         }
     }
 
     public void HandlePointerExit(ISelectable selectable, PointerEventData eventData)
     {
-        if (selectable is not RuntimeTransformAxis rta) return; // ignore if not runtime transform axis
-
-        if (!target || isDragging) return; // ignore hover while dragging
+        if (selectable is not RuntimeTransformAxis rta) return;
+        if (!target || isDragging) return;
 
         if (hovered == rta)
         {
@@ -170,39 +194,35 @@ public class RuntimeTransform : MonoBehaviour, IDraggableHandler
 
     public void HandlePointerDown(ISelectable selectable, PointerEventData eventData)
     {
-        if (selectable is not RuntimeTransformAxis rta) return; // ignore if not runtime transform axis
-
-        // Only left mouse/touch primary
+        if (selectable is not RuntimeTransformAxis rta) return;
         if (!target) return;
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
-        // Bypass locks with Ctrl if enabled; otherwise respect allowedAxes
-        bool bypass = holdCtrlBypassesLocks && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl));
+        bool bypass = holdCtrlBypassesLocks &&
+                      (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl));
         if (!bypass && !Has(allowedAxes, rta.axis)) return;
 
         _activePointerId = eventData.pointerId;
     }
 
-    public void HandlePointerUp(ISelectable ISelectable, PointerEventData eventData)
+    public void HandlePointerUp(ISelectable selectable, PointerEventData eventData)
     {
-        if (ISelectable is not RuntimeTransformAxis) return; // ignore if not runtime transform axis
-
+        if (selectable is not RuntimeTransformAxis) return;
         if (eventData.pointerId != _activePointerId) return;
-        _activePointerId = -999;
-        // If pointer up without a drag, nothing else to do.
+        _activePointerId = kNoPointerId;
     }
 
     public void HandleBeginDrag(IDraggable interactible, PointerEventData eventData)
     {
-        if (interactible is not RuntimeTransformAxis rta) return; // ignore if not runtime transform axis
-
+        if (interactible is not RuntimeTransformAxis rta) return;
         if (!target) return;
         if (eventData.pointerId != _activePointerId) return;
 
-        bool bypass = holdCtrlBypassesLocks && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl));
-        if (!bypass && !Has(allowedAxes, rta.axis)) return; // respect axis locks
+        bool bypass = holdCtrlBypassesLocks &&
+                      (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl));
+        if (!bypass && !Has(allowedAxes, rta.axis)) return;
 
-        active = (RuntimeTransformAxis) interactible;
+        active = rta;
         isDragging = true;
         _targetStartPos = target.position;
 
@@ -213,9 +233,9 @@ public class RuntimeTransform : MonoBehaviour, IDraggableHandler
         Camera cam = EventCamera(eventData);
         Vector3 camFwd = cam ? cam.transform.forward : Vector3.forward;
         Vector3 n = Vector3.ProjectOnPlane(camFwd, _dragAxisWorld);
-        if (n.sqrMagnitude < 1e-6f)
+        if (n.sqrMagnitude < kParallelEpsilon)
             n = Vector3.ProjectOnPlane((cam ? cam.transform.up : Vector3.up), _dragAxisWorld);
-        if (n.sqrMagnitude < 1e-6f) n = Vector3.right;
+        if (n.sqrMagnitude < kParallelEpsilon) n = Vector3.right;
         n.Normalize();
 
         _dragPlane = new Plane(n, _targetStartPos);
@@ -230,15 +250,14 @@ public class RuntimeTransform : MonoBehaviour, IDraggableHandler
 
     public void HandleDrag(IDraggable interactible, PointerEventData eventData)
     {
-        if (interactible is not RuntimeTransformAxis rta) return; // ignore if not runtime transform axis
-
+        if (interactible is not RuntimeTransformAxis rta) return;
         if (!target || !isDragging || active != rta) return;
-        Ray r = EventRay(eventData);
 
+        Ray r = EventRay(eventData);
         Vector3 currOnPlane = RayToPlane(r, _dragPlane, _dragPlaneOrigin);
         float rawDelta = Vector3.Dot(currOnPlane - _dragPlaneOrigin, _dragAxisWorld);
 
-        // Apply per-axis limits and snap
+        // Per-axis limits & snap
         float delta = ApplyAxisLimitsAndSnap(active.axis, rawDelta);
 
         // Candidate and final (respect optional world bounds)
@@ -250,33 +269,31 @@ public class RuntimeTransform : MonoBehaviour, IDraggableHandler
 
     public void HandleEndDrag(IDraggable interactible, PointerEventData eventData)
     {
-        if (interactible is not RuntimeTransformAxis rta) return; // ignore if not runtime transform axis
-
+        if (interactible is not RuntimeTransformAxis rta) return;
         if (active != rta) return;
-        isDragging = false;
-        _activePointerId = -999;
 
-        // If still hovering, return to hover state; else normal
+        isDragging = false;
+        _activePointerId = kNoPointerId;
+
         if (hovered == rta) rta.SetState(HandleState.Hover);
         else rta.SetState(HandleState.Normal);
 
         active = null;
 
-        // After a lock change, refresh handle visibility
-        ApplyHandleVisibilityByLocks();           // optional: in case locks were toggled mid-drag
+        // Refresh handle visibility in case locks toggled mid-drag
+        ApplyHandleVisibilityByLocks();
     }
 
-    // ---------- Helpers ----------
-    Vector3 GetWorldAxis(Axis a)
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Helpers
+    // ─────────────────────────────────────────────────────────────────────────────
+    Vector3 GetWorldAxis(Axis a) => a switch
     {
-        return a switch
-        {
-            Axis.X => transform.right,
-            Axis.Y => transform.up,
-            Axis.Z => transform.forward,
-            _ => Vector3.zero,
-        };
-    }
+        Axis.X => transform.right,
+        Axis.Y => transform.up,
+        Axis.Z => transform.forward,
+        _ => Vector3.zero,
+    };
 
     void SetAllStates(HandleState s)
     {
@@ -284,8 +301,11 @@ public class RuntimeTransform : MonoBehaviour, IDraggableHandler
         foreach (var h in _handles)
         {
             if (!h) continue;
-            // Keep hidden if locked
-            if (!Has(allowedAxes, h.axis)) { if (h.gameObject.activeSelf) h.gameObject.SetActive(false); continue; }
+            if (!Has(allowedAxes, h.axis))
+            {
+                if (h.gameObject.activeSelf) h.gameObject.SetActive(false);
+                continue;
+            }
             h.SetState(s);
         }
     }
@@ -302,7 +322,7 @@ public class RuntimeTransform : MonoBehaviour, IDraggableHandler
         var cam = EventCamera(e);
         var pos = e.position;
         if (cam) return cam.ScreenPointToRay(pos);
-        // Fallback (very rare): default forward ray from camera-less world origin
+        // Fallback: default forward ray from camera-less world origin
         return new Ray(new Vector3(pos.x, pos.y, -1000f), Vector3.forward);
     }
 
@@ -328,21 +348,20 @@ public class RuntimeTransform : MonoBehaviour, IDraggableHandler
         float e = Vector3.Dot(v, w0);
         float D = 1f - b * b; // since ||u||=||v||=1
 
-        if (Mathf.Abs(D) < 1e-6f) return 0f;
+        if (Mathf.Abs(D) < kParallelEpsilon) return 0f;
         return (b * e - d) / D;
     }
 
-    // ---------- Helpers for constraints >>>
-    AxisLimit GetLimit(Axis a)
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Constraint Helpers
+    // ─────────────────────────────────────────────────────────────────────────────
+    AxisLimit GetLimit(Axis a) => a switch
     {
-        return a switch
-        {
-            Axis.X => xLimit,
-            Axis.Y => yLimit,
-            Axis.Z => zLimit,
-            _ => default
-        };
-    }
+        Axis.X => xLimit,
+        Axis.Y => yLimit,
+        Axis.Z => zLimit,
+        _ => default
+    };
 
     static bool Has(AxisMask mask, Axis a)
     {
@@ -357,7 +376,6 @@ public class RuntimeTransform : MonoBehaviour, IDraggableHandler
         {
             if (!h) continue;
             bool allow = Has(allowedAxes, h.axis);
-            // Hide the handle entirely if the axis is not allowed
             if (h.gameObject.activeSelf != allow) h.gameObject.SetActive(allow);
         }
     }
